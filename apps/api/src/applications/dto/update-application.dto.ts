@@ -5,8 +5,7 @@ import {
   IsUrl,
 } from "class-validator";
 
-import { ApplicationStatus } from "@prisma/client";
-
+import { ApplicationStatus } from "../../../generated/prisma";
 export class UpdateApplicationDto {
   @IsOptional()
   @IsString()
