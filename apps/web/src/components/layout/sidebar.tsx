@@ -6,6 +6,7 @@ import {
   Briefcase,
   LayoutDashboard,
   Settings,
+  KanbanSquare,
 } from "lucide-react";
 
 export function Sidebar() {
@@ -32,6 +33,14 @@ export function Sidebar() {
         >
           <Briefcase className="h-4 w-4" />
           Applications
+        </Link>
+
+        <Link
+          href="/kanban"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-accent transition-colors"
+        >
+          <KanbanSquare className="h-4 w-4" />
+          Kanban
         </Link>
 
         <Link
