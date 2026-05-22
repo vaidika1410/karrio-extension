@@ -29,16 +29,51 @@ async function initializePopup() {
         return;
       }
 
-      document.getElementById(
-        "role",
-      ).value =
-        response.pageTitle
-          ?.split("|")[0]
-          ?.trim() || "";
+      const pageTitle =
+  response.pageTitle || "";
 
-      document.getElementById(
-        "company",
-      ).value = "";
+let role = "";
+let company = "";
+
+// Common separators
+const separators = [
+  " at ",
+  " - ",
+  " | ",
+  " @ ",
+];
+
+let matched = false;
+
+for (const separator of separators) {
+  if (
+    pageTitle.includes(separator)
+  ) {
+    const parts =
+      pageTitle.split(separator);
+
+    role = parts[0]?.trim() || "";
+    company =
+      parts[1]?.trim() || "";
+
+    matched = true;
+
+    break;
+  }
+}
+
+// fallback
+if (!matched) {
+  role = pageTitle;
+}
+
+document.getElementById(
+  "role",
+).value = role;
+
+document.getElementById(
+  "company",
+).value = company;
 
       window.jobData = response;
 
