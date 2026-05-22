@@ -30,50 +30,50 @@ async function initializePopup() {
       }
 
       const pageTitle =
-  response.pageTitle || "";
+        response.pageTitle || "";
 
-let role = "";
-let company = "";
+      let role = "";
+      let company = "";
 
-// Common separators
-const separators = [
-  " at ",
-  " - ",
-  " | ",
-  " @ ",
-];
+      // Common separators
+      const separators = [
+        " at ",
+        " - ",
+        " | ",
+        " @ ",
+      ];
 
-let matched = false;
+      let matched = false;
 
-for (const separator of separators) {
-  if (
-    pageTitle.includes(separator)
-  ) {
-    const parts =
-      pageTitle.split(separator);
+      for (const separator of separators) {
+        if (
+          pageTitle.includes(separator)
+        ) {
+          const parts =
+            pageTitle.split(separator);
 
-    role = parts[0]?.trim() || "";
-    company =
-      parts[1]?.trim() || "";
+          role = parts[0]?.trim() || "";
+          company =
+            parts[1]?.trim() || "";
 
-    matched = true;
+          matched = true;
 
-    break;
-  }
-}
+          break;
+        }
+      }
 
-// fallback
-if (!matched) {
-  role = pageTitle;
-}
+      // fallback
+      if (!matched) {
+        role = pageTitle;
+      }
 
-document.getElementById(
-  "role",
-).value = role;
+      document.getElementById(
+        "role",
+      ).value = role;
 
-document.getElementById(
-  "company",
-).value = company;
+      document.getElementById(
+        "company",
+      ).value = company;
 
       window.jobData = response;
 
@@ -130,6 +130,11 @@ async function saveJob() {
 
           platform:
             "LinkedIn",
+
+          notes:
+            document.getElementById(
+              "notes",
+            ).value,
         }),
       },
     );

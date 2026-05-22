@@ -60,6 +60,10 @@ export function ApplicationsTable() {
               Notes
             </TableHead>
 
+            <TableHead>
+              Link
+            </TableHead>
+
             <TableHead className="w-[80px] text-right">
             </TableHead>
           </TableRow>
@@ -88,6 +92,21 @@ export function ApplicationsTable() {
               <TableCell className="max-w-[300px] truncate text-muted-foreground">
                 {application.notes ||
                   "No notes"}
+              </TableCell>
+
+              <TableCell>
+                {application.jobUrl ? (
+                  <a
+                    href={application.jobUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary underline"
+                  >
+                    Open
+                  </a>
+                ) : (
+                  "-"
+                )}
               </TableCell>
 
               <TableCell className="text-right">
