@@ -6,10 +6,10 @@ import {
 
 export class CreateApplicationDto {
   @IsString()
-  company: string;
+  company!: string;
 
   @IsString()
-  role: string;
+  role!: string;
 
   @IsOptional()
   @IsString()
@@ -30,4 +30,9 @@ export class CreateApplicationDto {
   @IsOptional()
   @IsUrl()
   jobUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
 }

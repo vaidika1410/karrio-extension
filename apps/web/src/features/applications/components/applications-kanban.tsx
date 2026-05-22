@@ -19,7 +19,7 @@ import { updateApplication } from "@/services/applications.service";
 
 import { KanbanColumn } from "./kanban-column";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const statuses = [
     "APPLIED",
@@ -35,6 +35,13 @@ export function ApplicationsKanban() {
         queryKey: ["applications"],
         queryFn: getApplications,
     });
+
+    const [applications, setApplications] =
+        useState<any[]>([]);
+
+    useEffect(() => {
+        setApplications(data);
+    }, [data]);
 
     const mutation = useMutation({
         mutationFn: ({
@@ -65,10 +72,26 @@ export function ApplicationsKanban() {
 
         if (!over) return;
 
+        const applicationId = String(
+            active.id,
+        );
+
         const newStatus = String(over.id);
 
+        setApplications((prev) =>
+            prev.map((application) =>
+                application.id ===
+                    applicationId
+                    ? {
+                        ...application,
+                        status: newStatus,
+                    }
+                    : application,
+            ),
+        );
+
         mutation.mutate({
-            id: String(active.id),
+            id: applicationId,
             status: newStatus,
         });
     }
@@ -99,7 +122,7 @@ export function ApplicationsKanban() {
             <div className="flex gap-6 overflow-x-auto pb-4">
                 {statuses.map((status) => {
                     const filteredApplications =
-                        data.filter(
+                        applications.filter(
                             (application: any) =>
                                 application.status ===
                                 status,

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Karrio</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 360px;
+        margin: 0;
+        padding: 16px;
+
+        background: #0f172a;
+        color: white;
+
+        font-family:
+          Inter,
+          Arial,
+          sans-serif;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .header {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .title {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .subtitle {
+        color: #94a3b8;
+        font-size: 13px;
+      }
+
+      .card {
+        background: #111827;
+
+        border: 1px solid #1e293b;
+
+        border-radius: 16px;
+
+        padding: 16px;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 14px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .label {
+        font-size: 12px;
+        color: #94a3b8;
+      }
+
+      input {
+        width: 100%;
+
+        border: 1px solid #1e293b;
+
+        background: #0f172a;
+
+        color: white;
+
+        padding: 12px;
+
+        border-radius: 12px;
+
+        outline: none;
+
+        font-size: 14px;
+      }
+
+      input:focus {
+        border-color: #6366f1;
+      }
+
+      button {
+        border: none;
+
+        background: #6366f1;
+
+        color: white;
+
+        padding: 14px;
+
+        border-radius: 12px;
+
+        cursor: pointer;
+
+        font-weight: 600;
+
+        font-size: 14px;
+
+        transition: 0.2s;
+      }
+
+      button:hover {
+        background: #5855eb;
+      }
+
+      .footer {
+        text-align: center;
+
+        font-size: 12px;
+
+        color: #64748b;
+      }
+
+      .status {
+        font-size: 12px;
+        color: #22c55e;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="title">
+          Karrio
+        </div>
+
+        <div class="subtitle">
+          Save jobs instantly
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="field">
+          <div class="label">
+            Job Role
+          </div>
+
+          <input
+            id="role"
+            placeholder="Frontend Engineer"
+          />
+        </div>
+
+        <div class="field">
+          <div class="label">
+            Company
+          </div>
+
+          <input
+            id="company"
+            placeholder="Google"
+          />
+        </div>
+
+        <div class="field">
+          <div class="label">
+            Access Token
+          </div>
+
+          <input
+            id="token"
+            placeholder="Paste JWT token"
+          />
+        </div>
+
+        <button id="saveJob">
+          Save to Karrio
+        </button>
+
+        <div
+          id="status"
+          class="status"
+        ></div>
+      </div>
+
+      <div class="footer">
+        Karrio Extension MVP
+      </div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
