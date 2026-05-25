@@ -149,6 +149,11 @@ async function saveJob() {
       "status",
     ).innerText =
       "Application saved successfully!";
+
+    setTimeout(() => {
+      window.close();
+      
+    }, 1200);
   } catch (error) {
     console.error(error);
 
