@@ -70,20 +70,56 @@ export class ApplicationsService {
   }
 
   async update(
-    userId: string,
-    applicationId: string,
-    updateApplicationDto: UpdateApplicationDto,
-  ) {
-    await this.findOne(userId, applicationId);
+  userId: string,
+  applicationId: string,
+  updateApplicationDto: UpdateApplicationDto,
+) {
+  await this.findOne(
+    userId,
+    applicationId,
+  );
 
-    return this.prisma.application.update({
+  const updatedApplication =
+    await this.prisma.application.update({
       where: {
         id: applicationId,
       },
 
       data: updateApplicationDto,
     });
+
+  if (
+    updateApplicationDto.status
+  ) {
+    await this.prisma.applicationActivity.create({
+      data: {
+        applicationId,
+
+        type: "STATUS_CHANGED",
+
+        message: `Status changed to ${updateApplicationDto.status}`,
+      },
+    });
   }
+
+  if (
+    updateApplicationDto.notes !==
+    undefined
+  ) {
+    await this.prisma.applicationActivity.create({
+      data: {
+        applicationId,
+
+        type: "NOTES_UPDATED",
+
+        message:
+          "Notes updated",
+      },
+    });
+  }
+
+  return updatedApplication;
+}
 
   async remove(
     userId: string,

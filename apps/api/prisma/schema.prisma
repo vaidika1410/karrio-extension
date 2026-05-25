@@ -26,29 +26,40 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
-  
+
   applications Application[]
 }
 
 model Application {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  company     String
-  role        String
+  company String
+  role    String
 
-  status      ApplicationStatus @default(APPLIED)
+  status ApplicationStatus @default(APPLIED)
 
-  notes       String?
+  notes String?
 
-  jobUrl      String?
+  jobUrl String?
 
   description String?
 
-  platform    String?
+  platform String?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  userId      String
-  user        User @relation(fields: [userId], references: [id])
+  userId     String
+  user       User                  @relation(fields: [userId], references: [id])
+  activities ApplicationActivity[]
+}
+
+model ApplicationActivity {
+  id            String   @id @default(cuid())
+  applicationId String
+  type          String
+  message       String
+  createdAt     DateTime @default(now())
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 }
