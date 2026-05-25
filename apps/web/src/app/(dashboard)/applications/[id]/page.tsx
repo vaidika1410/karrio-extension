@@ -20,6 +20,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/lib/api";
 
+import { formatDistanceToNow } from "date-fns";
+
 export default function ApplicationDetailPage({
     params: paramsPromise,
 }: {
@@ -253,15 +255,35 @@ export default function ApplicationDetailPage({
                                     <div className="absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full bg-primary" />
 
                                     <div className="flex items-center justify-between gap-4">
-                                        <p className="font-medium">
-                                            {activity.message}
-                                        </p>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-lg">
+                                                {activity.type ===
+                                                    "CREATED"
+                                                    ? "🟢"
+                                                    : activity.type ===
+                                                        "STATUS_CHANGED"
+                                                        ? "🔵"
+                                                        : activity.type ===
+                                                            "NOTES_UPDATED"
+                                                            ? "🟡"
+                                                            : "⚪"}
+                                            </span>
+
+                                            <p className="font-medium">
+                                                {activity.message}
+                                            </p>
+                                        </div>
 
                                         <p className="text-xs text-muted-foreground whitespace-nowrap">
-                                            {new Date(
-                                                activity.createdAt,
-                                            ).toLocaleString()}
-                                        </p>
+    {formatDistanceToNow(
+        new Date(
+            activity.createdAt,
+        ),
+        {
+            addSuffix: true,
+        },
+    )}
+</p>
                                     </div>
                                 </div>
                             ),

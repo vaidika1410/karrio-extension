@@ -31,12 +31,27 @@ export class ApplicationsService {
       );
     }
 
-    return this.prisma.application.create({
+    const application =
+      await this.prisma.application.create({
+        data: {
+          ...createApplicationDto,
+          userId,
+        },
+      });
+
+    await this.prisma.applicationActivity.create({
       data: {
-        ...createApplicationDto,
-        userId,
+        applicationId:
+          application.id,
+
+        type: "CREATED",
+
+        message:
+          "Application created",
       },
     });
+
+    return application;
   }
 
   async findAll(userId: string) {
