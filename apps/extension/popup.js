@@ -140,7 +140,11 @@ async function saveJob() {
     );
 
     if (!response.ok) {
+      const errorData =
+        await response.json();
+
       throw new Error(
+        errorData.message ||
         "Failed request",
       );
     }
@@ -152,7 +156,7 @@ async function saveJob() {
 
     setTimeout(() => {
       window.close();
-      
+
     }, 1200);
   } catch (error) {
     console.error(error);
@@ -160,7 +164,7 @@ async function saveJob() {
     document.getElementById(
       "status",
     ).innerText =
-      "Failed to save application";
+      error.message;
   }
 }
 

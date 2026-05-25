@@ -1,6 +1,6 @@
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateApplicationDto } from "./dto/create-application.dto";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, BadRequestException } from "@nestjs/common";
 import { UpdateApplicationDto } from "./dto/update-application.dto";
 
 @Injectable()
@@ -11,6 +11,26 @@ export class ApplicationsService {
     userId: string,
     createApplicationDto: CreateApplicationDto,
   ) {
+
+    const existing =
+      await this.prisma.application.findFirst({
+        where: {
+          userId,
+
+          role: createApplicationDto.role,
+
+          company: createApplicationDto.company,
+
+          jobUrl: createApplicationDto.jobUrl,
+        },
+      });
+
+    if (existing) {
+      throw new BadRequestException(
+        "Application already exists",
+      );
+    }
+
     return this.prisma.application.create({
       data: {
         ...createApplicationDto,
