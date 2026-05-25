@@ -58,6 +58,14 @@ export class ApplicationsService {
           id: applicationId,
           userId,
         },
+
+        include: {
+          activities: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+        },
       });
 
     if (!application) {
@@ -70,56 +78,56 @@ export class ApplicationsService {
   }
 
   async update(
-  userId: string,
-  applicationId: string,
-  updateApplicationDto: UpdateApplicationDto,
-) {
-  await this.findOne(
-    userId,
-    applicationId,
-  );
-
-  const updatedApplication =
-    await this.prisma.application.update({
-      where: {
-        id: applicationId,
-      },
-
-      data: updateApplicationDto,
-    });
-
-  if (
-    updateApplicationDto.status
+    userId: string,
+    applicationId: string,
+    updateApplicationDto: UpdateApplicationDto,
   ) {
-    await this.prisma.applicationActivity.create({
-      data: {
-        applicationId,
+    await this.findOne(
+      userId,
+      applicationId,
+    );
 
-        type: "STATUS_CHANGED",
+    const updatedApplication =
+      await this.prisma.application.update({
+        where: {
+          id: applicationId,
+        },
 
-        message: `Status changed to ${updateApplicationDto.status}`,
-      },
-    });
+        data: updateApplicationDto,
+      });
+
+    if (
+      updateApplicationDto.status
+    ) {
+      await this.prisma.applicationActivity.create({
+        data: {
+          applicationId,
+
+          type: "STATUS_CHANGED",
+
+          message: `Status changed to ${updateApplicationDto.status}`,
+        },
+      });
+    }
+
+    if (
+      updateApplicationDto.notes !==
+      undefined
+    ) {
+      await this.prisma.applicationActivity.create({
+        data: {
+          applicationId,
+
+          type: "NOTES_UPDATED",
+
+          message:
+            "Notes updated",
+        },
+      });
+    }
+
+    return updatedApplication;
   }
-
-  if (
-    updateApplicationDto.notes !==
-    undefined
-  ) {
-    await this.prisma.applicationActivity.create({
-      data: {
-        applicationId,
-
-        type: "NOTES_UPDATED",
-
-        message:
-          "Notes updated",
-      },
-    });
-  }
-
-  return updatedApplication;
-}
 
   async remove(
     userId: string,

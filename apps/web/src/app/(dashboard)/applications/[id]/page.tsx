@@ -28,8 +28,8 @@ export default function ApplicationDetailPage({
     const params = use(paramsPromise);
 
     const [notes, setNotes] =
-    useState("");
-    
+        useState("");
+
 
     const queryClient =
         useQueryClient();
@@ -52,10 +52,10 @@ export default function ApplicationDetailPage({
     });
 
     useEffect(() => {
-    if (data) {
-        setNotes(data.notes || "");
-    }
-}, [data]);
+        if (data) {
+            setNotes(data.notes || "");
+        }
+    }, [data]);
 
     const updateNotesMutation =
         useMutation({
@@ -71,11 +71,18 @@ export default function ApplicationDetailPage({
                 return response.data;
             },
 
-            onSuccess: () => {
-                queryClient.invalidateQueries({
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
                     queryKey: [
                         "application",
-                        String(params.id),
+                        params.id,
+                    ],
+                });
+
+                await queryClient.refetchQueries({
+                    queryKey: [
+                        "application",
+                        params.id,
                     ],
                 });
             },
@@ -230,9 +237,14 @@ export default function ApplicationDetailPage({
                     Activity Timeline
                 </h2>
 
-                <div className="space-y-6">
-                    {data.activities?.length ? (
-                        data.activities.map(
+                {!data.activities ||
+                    data.activities.length === 0 ? (
+                    <p className="text-muted-foreground">
+                        No activity yet
+                    </p>
+                ) : (
+                    <div className="space-y-6">
+                        {data.activities.map(
                             (activity: any) => (
                                 <div
                                     key={activity.id}
@@ -240,24 +252,22 @@ export default function ApplicationDetailPage({
                                 >
                                     <div className="absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full bg-primary" />
 
-                                    <p className="font-medium">
-                                        {activity.message}
-                                    </p>
+                                    <div className="flex items-center justify-between gap-4">
+                                        <p className="font-medium">
+                                            {activity.message}
+                                        </p>
 
-                                    <p className="mt-1 text-sm text-muted-foreground">
-                                        {new Date(
-                                            activity.createdAt,
-                                        ).toLocaleString()}
-                                    </p>
+                                        <p className="text-xs text-muted-foreground whitespace-nowrap">
+                                            {new Date(
+                                                activity.createdAt,
+                                            ).toLocaleString()}
+                                        </p>
+                                    </div>
                                 </div>
                             ),
-                        )
-                    ) : (
-                        <p className="text-muted-foreground">
-                            No activity yet
-                        </p>
-                    )}
-                </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             <div className="rounded-2xl border border-border bg-card p-6">

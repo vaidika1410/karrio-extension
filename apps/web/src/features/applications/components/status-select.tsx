@@ -40,15 +40,25 @@ export function StatusSelect({
         },
       ),
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onSuccess: async () => {
+    await queryClient.invalidateQueries({
         queryKey: ["applications"],
-      });
+    });
 
-      queryClient.invalidateQueries({
-        queryKey: ["application", applicationId],
-      });
-    },
+    await queryClient.invalidateQueries({
+        queryKey: [
+            "application",
+            applicationId,
+        ],
+    });
+
+    await queryClient.refetchQueries({
+        queryKey: [
+            "application",
+            applicationId,
+        ],
+    });
+},
   });
 
   return (
