@@ -58,6 +58,28 @@ export function CreateApplicationForm({
 
       onSuccess?.();
     },
+
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message;
+
+      if (
+        message ===
+        "Application already exists"
+      ) {
+        alert(
+          "Application already saved",
+        );
+
+        onSuccess?.();
+
+        return;
+      }
+
+      alert(
+        "Failed to create application",
+      );
+    },
   });
 
   return (

@@ -2,24 +2,12 @@ import { CreateApplicationModal } from "@/features/applications/components/creat
 
 import { ApplicationsTable } from "@/features/applications/components/applications-table";
 
+import { ApplicationStats } from "@/features/applications/components/application-stats";
+
+import { useQuery } from "@tanstack/react-query";
+
+import { ApplicationsDashboard } from "@/features/applications/components/applications-dashboard";
+
 export default function ApplicationsPage() {
-  return (
-    <div className="space-y-6 p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">
-            Applications
-          </h1>
-
-          <p className="text-sm text-muted-foreground">
-            Track your job applications
-          </p>
-        </div>
-
-        <CreateApplicationModal />
-      </div>
-
-      <ApplicationsTable />
-    </div>
-  );
+  return <ApplicationsDashboard />;
 }

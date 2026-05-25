@@ -1,6 +1,5 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 
 import {
   Table,
@@ -11,17 +10,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { getApplications } from "@/services/applications.service";
-
 import { StatusSelect } from "./status-select";
 
 import { ApplicationRowActions } from "./application-row-actions";
 
-export function ApplicationsTable() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["applications"],
-    queryFn: getApplications,
-  });
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+export function ApplicationsTable({
+  data,
+  isLoading,
+}: {
+  data: any[];
+  isLoading: boolean;
+}) {
+
 
   if (isLoading) {
     return (
@@ -38,6 +41,8 @@ export function ApplicationsTable() {
       </div>
     );
   }
+
+  const router = useRouter();
 
   return (
     <div className="overflow-visible rounded-xl border border-border bg-card">
@@ -73,9 +78,24 @@ export function ApplicationsTable() {
           {data.map((application: any) => (
             <TableRow
               key={application.id}
+              onClick={() =>
+                router.push(
+                  `/applications/${application.id}`,
+                )
+              }
+              className="
+    cursor-pointer
+    transition-colors
+    hover:bg-muted/40
+  "
             >
               <TableCell className="font-medium">
-                {application.company}
+                <Link
+                  href={`/applications/${application.id}`}
+                  className="hover:underline"
+                >
+                  {application.company}
+                </Link>
               </TableCell>
 
               <TableCell>
@@ -100,7 +120,14 @@ export function ApplicationsTable() {
                     href={application.jobUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary underline"
+                    onClick={(e) =>
+                      e.stopPropagation()
+                    }
+                    className="
+    text-primary
+    underline
+    underline-offset-4
+  "
                   >
                     Open
                   </a>
@@ -110,9 +137,15 @@ export function ApplicationsTable() {
               </TableCell>
 
               <TableCell className="text-right">
-                <ApplicationRowActions
-                  applicationId={application.id}
-                />
+                <div
+                  onClick={(e) =>
+                    e.stopPropagation()
+                  }
+                >
+                  <ApplicationRowActions
+                    applicationId={application.id}
+                  />
+                </div>
               </TableCell>
             </TableRow>
           ))}

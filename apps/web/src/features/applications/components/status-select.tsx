@@ -44,6 +44,10 @@ export function StatusSelect({
       queryClient.invalidateQueries({
         queryKey: ["applications"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["application", applicationId],
+      });
     },
   });
 

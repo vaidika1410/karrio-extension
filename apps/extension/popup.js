@@ -143,15 +143,30 @@ async function saveJob() {
       const errorData =
         await response.json();
 
+      if (
+        errorData.message ===
+        "Application already exists"
+      ) {
+        throw new Error(
+          "Already saved in Karrio",
+        );
+      }
+
       throw new Error(
         errorData.message ||
         "Failed request",
       );
     }
 
-    document.getElementById(
-      "status",
-    ).innerText =
+    const status =
+      document.getElementById(
+        "status",
+      );
+
+    status.className =
+      "status success";
+
+    status.innerText =
       "Application saved successfully!";
 
     setTimeout(() => {
@@ -161,9 +176,15 @@ async function saveJob() {
   } catch (error) {
     console.error(error);
 
-    document.getElementById(
-      "status",
-    ).innerText =
+    const status =
+      document.getElementById(
+        "status",
+      );
+
+    status.className =
+      "status error";
+
+    status.innerText =
       error.message;
   }
 }

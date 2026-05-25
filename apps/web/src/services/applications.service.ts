@@ -29,3 +29,13 @@ export async function updateApplication(
 
   return response.data;
 }
+
+export async function getApplication(
+  id: string,
+) {
+  const response = await api.get(
+    `/applications/${id}`,
+  );
+
+  return response.data;
+}
