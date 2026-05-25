@@ -32,6 +32,16 @@ export default function ApplicationDetailPage({
     const [notes, setNotes] =
         useState("");
 
+    const [
+        interviewDate,
+        setInterviewDate,
+    ] = useState("");
+
+    const [
+        interviewType,
+        setInterviewType,
+    ] = useState("");
+
 
     const queryClient =
         useQueryClient();
@@ -57,6 +67,18 @@ export default function ApplicationDetailPage({
         if (data) {
             setNotes(data.notes || "");
         }
+
+        setInterviewDate(
+            data?.interviewDate
+                ? formatDateTimeLocal(
+                    data.interviewDate,
+                )
+                : "",
+        );
+
+        setInterviewType(
+            data?.interviewType || "",
+        );
     }, [data]);
 
     const updateNotesMutation =
@@ -90,6 +112,47 @@ export default function ApplicationDetailPage({
             },
         });
 
+    const interviewMutation =
+        useMutation({
+            mutationFn: async () => {
+                const response =
+                    await api.patch(
+                        `/applications/${params.id}`,
+                        {
+                            interviewDate:
+    interviewDate
+        ? new Date(
+              interviewDate,
+          ).toISOString()
+        : null,
+
+                            interviewType,
+                        },
+                    );
+
+                return response.data;
+            },
+
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
+                    queryKey: [
+                        "application",
+                        params.id,
+                    ],
+                });
+
+                await queryClient.refetchQueries({
+                    queryKey: [
+                        "upcoming-interviews",
+                    ],
+                });
+
+                await queryClient.refetchQueries({
+                    queryKey: ["applications"],
+                });
+            },
+        });
+
     if (isLoading) {
         return (
             <div className="p-6">
@@ -111,6 +174,10 @@ export default function ApplicationDetailPage({
             </div>
         );
     }
+
+    const canEditInterview =
+        data.status !==
+        "APPLIED";
 
     return (
         <div className="space-y-6 p-6">
@@ -189,6 +256,7 @@ export default function ApplicationDetailPage({
                     </Button>
                 </div>
 
+
                 <Textarea
                     value={notes}
                     onChange={(e) =>
@@ -199,6 +267,93 @@ export default function ApplicationDetailPage({
                     placeholder="Add interview prep notes, follow-ups, recruiter info..."
                     className="min-h-[180px]"
                 />
+            </div>
+
+            <div className="rounded-2xl border border-border bg-card p-6">
+                <div className="mb-4 flex items-center justify-between">
+                    <h2 className="text-lg font-semibold">
+                        Interview
+                    </h2>
+
+                    <Button
+                        size="sm"
+                        onClick={() =>
+                            interviewMutation.mutate()
+                        }
+                        disabled={
+                            interviewMutation.isPending || !canEditInterview
+                        }
+                    >
+                        {interviewMutation.isPending
+                            ? "Saving..."
+                            : "Save Interview"}
+                    </Button>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+
+                    {!canEditInterview && (
+                        <p className="mt-4 text-sm text-muted-foreground">
+                            Interview details can be added once the application status moves beyond APPLIED.
+                        </p>
+                    )}
+
+                    <div className="space-y-2">
+                        <label className="text-sm text-muted-foreground">
+                            Interview Date
+                        </label>
+
+                        <input
+                            type="datetime-local"
+                            value={interviewDate}
+                            disabled={!canEditInterview}
+                            onChange={(e) =>
+                                setInterviewDate(
+                                    e.target.value,
+                                )
+                            }
+                            className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-border
+                    bg-background
+                    px-3
+                    py-2
+                    text-sm
+                "
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm text-muted-foreground">
+                            Interview Type
+                        </label>
+
+                        <input
+                            type="text"
+                            placeholder="HR Round, Technical, OA..."
+                            value={interviewType}
+                            disabled={!canEditInterview}
+                            onChange={(e) =>
+                                setInterviewType(
+                                    e.target.value,
+                                )
+                            }
+                            className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-border
+                    bg-background
+                    px-3
+                    py-2
+                    text-sm
+                "
+                        />
+                    </div>
+
+                </div>
             </div>
 
             <div className="rounded-2xl border border-border bg-card p-6">
@@ -275,15 +430,15 @@ export default function ApplicationDetailPage({
                                         </div>
 
                                         <p className="text-xs text-muted-foreground whitespace-nowrap">
-    {formatDistanceToNow(
-        new Date(
-            activity.createdAt,
-        ),
-        {
-            addSuffix: true,
-        },
-    )}
-</p>
+                                            {formatDistanceToNow(
+                                                new Date(
+                                                    activity.createdAt,
+                                                ),
+                                                {
+                                                    addSuffix: true,
+                                                },
+                                            )}
+                                        </p>
                                     </div>
                                 </div>
                             ),
@@ -305,4 +460,24 @@ export default function ApplicationDetailPage({
             </div>
         </div>
     );
+}
+
+function formatDateTimeLocal(
+    dateString: string,
+) {
+    const date =
+        new Date(dateString);
+
+    const offset =
+        date.getTimezoneOffset();
+
+    const localDate =
+        new Date(
+            date.getTime() -
+            offset * 60 * 1000,
+        );
+
+    return localDate
+        .toISOString()
+        .slice(0, 16);
 }

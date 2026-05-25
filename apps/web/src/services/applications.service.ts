@@ -39,3 +39,13 @@ export async function getApplication(
 
   return response.data;
 }
+
+
+export async function getUpcomingInterviews() {
+  const response =
+    await api.get(
+      "/applications/upcoming-interviews",
+    );
+
+  return response.data;
+}
