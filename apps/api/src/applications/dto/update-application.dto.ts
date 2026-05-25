@@ -38,4 +38,11 @@ export class UpdateApplicationDto {
   @IsOptional()
   @IsEnum(ApplicationStatus)
   status?: ApplicationStatus;
+
+  @IsOptional()
+  @IsString()
+  interviewType?: string;
+
+  @IsOptional()
+  interviewDate?: Date;
 }

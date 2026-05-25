@@ -40,6 +40,10 @@ model Application {
 
   notes String?
 
+  interviewDate DateTime?
+
+  interviewType String?
+
   jobUrl String?
 
   description String?
