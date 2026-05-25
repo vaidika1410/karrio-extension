@@ -66,6 +66,26 @@ export class ApplicationsService {
     });
   }
 
+  async getUpcomingInterviews(
+    userId: string,
+  ) {
+    return this.prisma.application.findMany({
+      where: {
+        userId,
+
+        interviewDate: {
+          not: null,
+        },
+      },
+
+      orderBy: {
+        interviewDate: "asc",
+      },
+
+      take: 5,
+    });
+  }
+
   async findOne(userId: string, applicationId: string) {
     const application =
       await this.prisma.application.findFirst({

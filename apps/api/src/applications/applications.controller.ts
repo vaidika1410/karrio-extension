@@ -42,6 +42,15 @@ export class ApplicationsController {
         );
     }
 
+    @Get("upcoming-interviews")
+    getUpcomingInterviews(
+        @CurrentUser() user: any,
+    ) {
+        return this.applicationsService.getUpcomingInterviews(
+            user.userId,
+        );
+    }
+
     @Get(":id")
     findOne(
         @CurrentUser() user: any,
@@ -52,6 +61,7 @@ export class ApplicationsController {
             id,
         );
     }
+
 
     @Patch(":id")
     update(
