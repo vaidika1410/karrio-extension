@@ -292,12 +292,6 @@ export default function ApplicationDetailPage({
 
                 <div className="grid gap-4 md:grid-cols-2">
 
-                    {!canEditInterview && (
-                        <p className="mt-4 text-sm text-muted-foreground">
-                            Interview details can be added once the application status moves beyond APPLIED.
-                        </p>
-                    )}
-
                     <div className="space-y-2">
                         <label className="text-sm text-muted-foreground">
                             Interview Date
@@ -352,6 +346,12 @@ export default function ApplicationDetailPage({
                 "
                         />
                     </div>
+
+                    {!canEditInterview && (
+                        <p className="mt-4 text-sm text-muted-foreground">
+                            Interview details can be added once the application status moves beyond APPLIED.
+                        </p>
+                    )}
 
                 </div>
             </div>

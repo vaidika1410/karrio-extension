@@ -67,24 +67,27 @@ export class ApplicationsService {
   }
 
   async getUpcomingInterviews(
-    userId: string,
-  ) {
-    return this.prisma.application.findMany({
-      where: {
-        userId,
+  userId: string,
+) {
+  return this.prisma.application.findMany({
+    where: {
+      userId,
 
-        interviewDate: {
-          not: null,
-        },
+      interviewDate: {
+        not: null,
+        gte: new Date(),
       },
 
-      orderBy: {
-        interviewDate: "asc",
-      },
+      status: "INTERVIEW",
+    },
 
-      take: 5,
-    });
-  }
+    orderBy: {
+      interviewDate: "asc",
+    },
+
+    take: 5,
+  });
+}
 
   async findOne(userId: string, applicationId: string) {
     const application =
@@ -130,6 +133,46 @@ export class ApplicationsService {
 
         data: updateApplicationDto,
       });
+
+    if (
+      updateApplicationDto.interviewDate
+    ) {
+      const application =
+        await this.prisma.application.findUnique({
+          where: {
+            id: applicationId,
+          },
+        });
+
+      if (application) {
+        const reminderTime =
+          new Date(
+            updateApplicationDto.interviewDate,
+          );
+
+        reminderTime.setHours(
+          reminderTime.getHours() - 1,
+        );
+
+        await this.prisma.reminder.create({
+          data: {
+            title:
+              "Upcoming Interview",
+
+            message: `${application.company} • ${application.role} interview starts in 1 hour`,
+
+            remindAt:
+              reminderTime,
+
+            type: "INTERVIEW",
+
+            applicationId,
+
+            userId,
+          },
+        });
+      }
+    }
 
     if (
       updateApplicationDto.status

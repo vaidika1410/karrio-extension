@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { useQuery } from "@tanstack/react-query";
 
-import { differenceInHours } from "date-fns";
+import { differenceInMinutes } from "date-fns";
 
 import { getUpcomingInterviews } from "@/services/applications.service";
 
@@ -28,8 +28,8 @@ export function InterviewReminders() {
                     return false;
                 }
 
-                const hoursLeft =
-                    differenceInHours(
+                const minutesLeft =
+                    differenceInMinutes(
                         new Date(
                             interview.interviewDate,
                         ),
@@ -37,7 +37,7 @@ export function InterviewReminders() {
                     );
 
                 return (
-                    hoursLeft > 0 && hoursLeft <= 24
+                    minutesLeft > 0 && minutesLeft <= 24
                 );
             },
         );
@@ -63,8 +63,8 @@ export function InterviewReminders() {
                     (
                         reminder: any,
                     ) => {
-                        const hoursLeft =
-                            differenceInHours(
+                        const minutesLeft =
+                            differenceInMinutes(
                                 new Date(
                                     reminder.interviewDate,
                                 ),
@@ -72,7 +72,7 @@ export function InterviewReminders() {
                             );
 
                         const isUrgent =
-                            hoursLeft <= 3;
+                            minutesLeft <= 3;
 
                         return (
                             <Link
@@ -82,11 +82,10 @@ export function InterviewReminders() {
                                 href={`/applications/${reminder.id}`}
                                 className={`
                   block rounded-xl border p-4 transition-colors
-                  ${
-                      isUrgent
-                          ? "border-red-500/40 bg-red-500/10"
-                          : "border-yellow-500/40 bg-yellow-500/10"
-                  }
+                  ${isUrgent
+                                        ? "border-red-500/40 bg-red-500/10"
+                                        : "border-yellow-500/40 bg-yellow-500/10"
+                                    }
                 `}
                             >
                                 <div className="flex items-start justify-between gap-4">
@@ -112,10 +111,13 @@ export function InterviewReminders() {
 
                                     <div className="text-right">
                                         <p className="font-semibold">
-                                            {hoursLeft <=
-                                            0
+                                            {minutesLeft <= 0
                                                 ? "Interview ongoing/overdue"
-                                                : `${hoursLeft}h left`}
+                                                : minutesLeft < 60
+                                                    ? `${minutesLeft}m left`
+                                                    : `${Math.floor(
+                                                        minutesLeft / 60,
+                                                    )}h left`}
                                         </p>
 
                                         <p className="mt-1 text-xs text-muted-foreground">

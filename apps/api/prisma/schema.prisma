@@ -28,6 +28,8 @@ model User {
   createdAt DateTime @default(now())
 
   applications Application[]
+
+  reminders Reminder[]
 }
 
 model Application {
@@ -56,6 +58,8 @@ model Application {
   userId     String
   user       User                  @relation(fields: [userId], references: [id])
   activities ApplicationActivity[]
+
+  reminders Reminder[]
 }
 
 model ApplicationActivity {
@@ -66,4 +70,27 @@ model ApplicationActivity {
   createdAt     DateTime @default(now())
 
   application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+}
+
+model Reminder {
+  id String @id @default(cuid())
+
+  title String
+
+  message String?
+
+  remindAt DateTime
+
+  sent Boolean @default(false)
+
+  type String
+
+  createdAt DateTime @default(now())
+
+  applicationId String?
+
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

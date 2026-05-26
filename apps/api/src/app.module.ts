@@ -8,6 +8,9 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ApplicationsModule } from './applications/applications.module';
 
+import { ScheduleModule } from "@nestjs/schedule";
+import { RemindersService } from "./reminders/reminders.service";
+
 @Module({
   imports: [
     PrismaModule,
@@ -18,8 +21,9 @@ import { ApplicationsModule } from './applications/applications.module';
     AuthModule,
     UsersModule,
     ApplicationsModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RemindersService],
 })
 export class AppModule { }
