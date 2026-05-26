@@ -49,7 +49,7 @@ export function Sidebar() {
   const user = getStoredUser();
 
   return (
-    <aside className="hidden w-[17.5rem] shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex">
+    <aside className="sticky top-0 hidden h-screen w-[17.5rem] shrink-0 flex-col overflow-y-auto border-r border-sidebar-border bg-sidebar md:flex">
       <div className="flex h-16 items-center gap-2.5 border-b border-sidebar-border px-6">
         <div className="flex size-9 items-center justify-center rounded-xl bg-primary/15 text-primary">
           <Sparkles className="size-4" strokeWidth={2.25} />
