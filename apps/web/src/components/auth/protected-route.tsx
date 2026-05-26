@@ -39,7 +39,11 @@ export function ProtectedRoute({
   }, [router]);
 
   if (isChecking) {
-    return null;
+    return (
+      <div className="flex min-h-screen items-center justify-center app-shell-gradient">
+        <div className="size-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
   }
 
   if (!authorized) {

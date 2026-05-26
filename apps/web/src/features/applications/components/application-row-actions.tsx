@@ -19,6 +19,8 @@ import {
 
 import { Button } from "@/components/ui/button";
 
+import { toast } from "sonner";
+
 import { deleteApplication } from "@/services/applications.service";
 
 export function ApplicationRowActions({
@@ -36,6 +38,10 @@ export function ApplicationRowActions({
             queryClient.invalidateQueries({
                 queryKey: ["applications"],
             });
+            toast.success("Application deleted");
+        },
+        onError: () => {
+            toast.error("Could not delete application");
         },
     });
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useSortable } from "@dnd-kit/sortable";
-
 import { CSS } from "@dnd-kit/utilities";
+import Link from "next/link";
 
 import { StatusBadge } from "./status-badge";
 
@@ -25,14 +25,13 @@ export function DraggableApplicationCard({
     setNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({
     id: application.id,
   });
 
   const style = {
-    transform: CSS.Transform.toString(
-      transform,
-    ),
+    transform: CSS.Transform.toString(transform),
     transition,
   };
 
@@ -42,27 +41,29 @@ export function DraggableApplicationCard({
       style={style}
       {...attributes}
       {...listeners}
-      className="cursor-grab space-y-3 rounded-xl border border-border bg-background p-4 transition-colors hover:bg-accent/30 active:cursor-grabbing"
+      className={`group cursor-grab space-y-2.5 rounded-xl border border-border/60 bg-background p-3.5 shadow-sm transition-all hover:border-primary/25 hover:shadow-md active:cursor-grabbing ${
+        isDragging ? "opacity-60" : ""
+      }`}
     >
-      <div className="space-y-1">
-        <h3 className="font-medium">
+      <div className="space-y-0.5">
+        <Link
+          href={`/applications/${application.id}`}
+          className="font-medium leading-snug hover:text-primary"
+          onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
+        >
           {application.role}
-        </h3>
-
-        <p className="text-sm text-muted-foreground">
-          {application.company}
-        </p>
+        </Link>
+        <p className="text-sm text-muted-foreground">{application.company}</p>
       </div>
 
-      <StatusBadge
-        status={application.status}
-      />
+      <StatusBadge status={application.status} />
 
-      {application.notes && (
-        <p className="line-clamp-3 text-sm text-muted-foreground">
+      {application.notes ? (
+        <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">
           {application.notes}
         </p>
-      )}
+      ) : null}
     </div>
   );
 }

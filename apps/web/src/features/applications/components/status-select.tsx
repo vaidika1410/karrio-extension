@@ -13,14 +13,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import {
+  APPLICATION_STATUSES,
+  STATUS_LABELS,
+} from "@/lib/application-status";
 import { updateApplication } from "@/services/applications.service";
-
-const statuses = [
-  "APPLIED",
-  "INTERVIEW",
-  "OFFER",
-  "REJECTED",
-];
 
 export function StatusSelect({
   applicationId,
@@ -68,17 +65,17 @@ export function StatusSelect({
         mutation.mutate(value)
       }
     >
-      <SelectTrigger className="w-[140px] ">
+      <SelectTrigger className="h-9 w-[148px] border-border/80 bg-background">
         <SelectValue />
       </SelectTrigger>
 
       <SelectContent>
-        {statuses.map((status) => (
+        {APPLICATION_STATUSES.map((status) => (
           <SelectItem
             key={status}
             value={status}
           >
-            {status}
+            {STATUS_LABELS[status]}
           </SelectItem>
         ))}
       </SelectContent>

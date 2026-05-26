@@ -1,33 +1,28 @@
 import { Badge } from "@/components/ui/badge";
+import { STATUS_LABELS } from "@/lib/application-status";
+import { cn } from "@/lib/utils";
 
-const statusStyles: Record<
-  string,
-  string
-> = {
+const statusStyles: Record<string, string> = {
   APPLIED:
-    "bg-blue-500/10 text-blue-400 border-blue-500/20",
-
+    "border-sky-500/25 bg-sky-500/10 text-sky-700 dark:text-sky-300",
   INTERVIEW:
-    "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-
+    "border-amber-500/25 bg-amber-500/10 text-amber-800 dark:text-amber-300",
   OFFER:
-    "bg-green-500/10 text-green-400 border-green-500/20",
-
+    "border-emerald-500/25 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300",
   REJECTED:
-    "bg-red-500/10 text-red-400 border-red-500/20",
+    "border-red-500/20 bg-red-500/10 text-red-700 dark:text-red-300",
 };
 
-export function StatusBadge({
-  status,
-}: {
-  status: string;
-}) {
+export function StatusBadge({ status }: { status: string }) {
   return (
     <Badge
       variant="outline"
-      className={statusStyles[status]}
+      className={cn(
+        "rounded-md border px-2 py-0.5 text-[0.7rem] font-medium tracking-wide",
+        statusStyles[status],
+      )}
     >
-      {status}
+      {STATUS_LABELS[status] ?? status}
     </Badge>
   );
 }

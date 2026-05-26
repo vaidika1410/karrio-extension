@@ -1,15 +1,14 @@
 "use client";
 
 import { useState } from "react";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { toast } from "sonner";
+
 import { api } from "@/lib/api";
-
 import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
-
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 interface CreateApplicationData {
@@ -26,21 +25,16 @@ export function CreateApplicationForm({
 }) {
   const queryClient = useQueryClient();
 
-  const [formData, setFormData] =
-    useState<CreateApplicationData>({
-      company: "",
-      role: "",
-      status: "APPLIED",
-      notes: "",
-    });
+  const [formData, setFormData] = useState<CreateApplicationData>({
+    company: "",
+    role: "",
+    status: "APPLIED",
+    notes: "",
+  });
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await api.post(
-        "/applications",
-        formData,
-      );
-
+      const response = await api.post("/applications", formData);
       return response.data;
     },
 
@@ -56,75 +50,72 @@ export function CreateApplicationForm({
         notes: "",
       });
 
+      toast.success("Application added");
       onSuccess?.();
     },
 
-    onError: (error: any) => {
-      const message =
-        error?.response?.data?.message;
+    onError: (error: { response?: { data?: { message?: string } } }) => {
+      const message = error?.response?.data?.message;
 
-      if (
-        message ===
-        "Application already exists"
-      ) {
-        alert(
-          "Application already saved",
-        );
-
+      if (message === "Application already exists") {
+        toast.info("This application is already in your list");
         onSuccess?.();
-
         return;
       }
 
-      alert(
-        "Failed to create application",
-      );
+      toast.error("Could not save application");
     },
   });
 
+  const canSubmit =
+    formData.company.trim().length > 0 && formData.role.trim().length > 0;
+
   return (
     <div className="space-y-4">
-      <Input
-        placeholder="Company"
-        value={formData.company}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            company: e.target.value,
-          })
-        }
-      />
+      <div className="space-y-2">
+        <Label htmlFor="company">Company</Label>
+        <Input
+          id="company"
+          placeholder="e.g. Acme Corp"
+          value={formData.company}
+          onChange={(e) =>
+            setFormData({ ...formData, company: e.target.value })
+          }
+        />
+      </div>
 
-      <Input
-        placeholder="Role"
-        value={formData.role}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            role: e.target.value,
-          })
-        }
-      />
+      <div className="space-y-2">
+        <Label htmlFor="role">Role</Label>
+        <Input
+          id="role"
+          placeholder="e.g. Software Engineer"
+          value={formData.role}
+          onChange={(e) =>
+            setFormData({ ...formData, role: e.target.value })
+          }
+        />
+      </div>
 
-      <Textarea
-        placeholder="Notes"
-        value={formData.notes}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            notes: e.target.value,
-          })
-        }
-      />
+      <div className="space-y-2">
+        <Label htmlFor="notes">Notes (optional)</Label>
+        <Textarea
+          id="notes"
+          placeholder="Referral, salary range, recruiter name..."
+          value={formData.notes}
+          onChange={(e) =>
+            setFormData({ ...formData, notes: e.target.value })
+          }
+          className="min-h-[100px] resize-none"
+        />
+      </div>
 
       <Button
         onClick={() => mutation.mutate()}
-        disabled={mutation.isPending}
+        disabled={mutation.isPending || !canSubmit}
         className="w-full"
+        size="lg"
       >
-        {mutation.isPending
-          ? "Creating..."
-          : "Create Application"}
+        {mutation.isPending ? "Saving..." : "Save application"}
       </Button>
     </div>
   );

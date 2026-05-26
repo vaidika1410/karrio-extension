@@ -1,19 +1,18 @@
+import { PageContainer } from "@/components/layout/page-container";
+import { PageHeader } from "@/components/layout/page-header";
+import { CreateApplicationModal } from "@/features/applications/components/create-application-modal";
 import { ApplicationsKanban } from "@/features/applications/components/applications-kanban";
 
 export default function KanbanPage() {
   return (
-    <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Kanban Board
-        </h1>
-
-        <p className="text-muted-foreground">
-          Track applications visually
-        </p>
-      </div>
+    <PageContainer className="max-w-[100rem]">
+      <PageHeader
+        title="Kanban board"
+        description="Drag cards between stages as your applications move forward."
+        actions={<CreateApplicationModal />}
+      />
 
       <ApplicationsKanban />
-    </div>
+    </PageContainer>
   );
 }

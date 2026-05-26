@@ -5,6 +5,7 @@ import "./globals.css";
 
 import { QueryProvider } from "@/providers/query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { ToastProvider } from "@/providers/toast-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,8 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Karrio",
-  description: "Track and manage your job applications",
+  title: "Karrio — Track your job applications",
+  description:
+    "A calm workspace to add roles, follow your pipeline, and stay ready for interviews.",
 };
 
 export default function RootLayout({
@@ -34,7 +36,10 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-background text-foreground">
         <ThemeProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            {children}
+            <ToastProvider />
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

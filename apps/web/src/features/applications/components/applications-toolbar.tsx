@@ -1,15 +1,22 @@
 "use client";
 
+import { Search } from "lucide-react";
+
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { STATUS_FILTER_OPTIONS } from "@/lib/application-status";
+
 interface ApplicationsToolbarProps {
   search: string;
-  setSearch: (
-    value: string,
-  ) => void;
-
+  setSearch: (value: string) => void;
   status: string;
-  setStatus: (
-    value: string,
-  ) => void;
+  setStatus: (value: string) => void;
 }
 
 export function ApplicationsToolbar({
@@ -19,65 +26,29 @@ export function ApplicationsToolbar({
   setStatus,
 }: ApplicationsToolbarProps) {
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <input
-        value={search}
-        onChange={(e) =>
-          setSearch(
-            e.target.value,
-          )
-        }
-        placeholder="Search company or role..."
-        className="
-          h-10
-          rounded-xl
-          border
-          border-border
-          bg-background
-          px-4
-          text-sm
-          outline-none
-        "
-      />
+    <div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-card/60 p-4 shadow-[var(--shadow-soft)] backdrop-blur-sm sm:flex-row sm:items-center">
+      <div className="relative min-w-0 flex-1">
+        <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by company or role..."
+          className="h-10 border-border/80 bg-background pl-9"
+        />
+      </div>
 
-      <select
-        value={status}
-        onChange={(e) =>
-          setStatus(
-            e.target.value,
-          )
-        }
-        className="
-          h-10
-          rounded-xl
-          border
-          border-border
-          bg-background
-          px-4
-          text-sm
-          outline-none
-        "
-      >
-        <option value="ALL">
-          All Statuses
-        </option>
-
-        <option value="APPLIED">
-          Applied
-        </option>
-
-        <option value="INTERVIEW">
-          Interview
-        </option>
-
-        <option value="REJECTED">
-          Rejected
-        </option>
-
-        <option value="OFFER">
-          Offer
-        </option>
-      </select>
+      <Select value={status} onValueChange={setStatus}>
+        <SelectTrigger className="h-10 w-full border-border/80 bg-background sm:w-[200px]">
+          <SelectValue placeholder="Filter status" />
+        </SelectTrigger>
+        <SelectContent>
+          {STATUS_FILTER_OPTIONS.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

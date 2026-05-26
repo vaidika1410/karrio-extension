@@ -9,10 +9,14 @@ import { StatusSelect } from "@/features/applications/components/status-select";
 import { use } from "react";
 
 import Link from "next/link";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
 import { useState, useEffect } from "react";
 
+import { PageContainer } from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 import { Textarea } from "@/components/ui/textarea";
 
@@ -21,6 +25,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "sonner";
 
 export default function ApplicationDetailPage({
     params: paramsPromise,
@@ -109,6 +114,11 @@ export default function ApplicationDetailPage({
                         params.id,
                     ],
                 });
+
+                toast.success("Notes saved");
+            },
+            onError: () => {
+                toast.error("Could not save notes");
             },
         });
 
@@ -150,28 +160,41 @@ export default function ApplicationDetailPage({
                 await queryClient.refetchQueries({
                     queryKey: ["applications"],
                 });
+
+                toast.success("Interview details saved");
+            },
+            onError: () => {
+                toast.error("Could not save interview details");
             },
         });
 
     if (isLoading) {
         return (
-            <div className="p-6">
-                Loading...
-            </div>
+            <PageContainer>
+                <div className="h-48 animate-pulse rounded-2xl bg-muted" />
+            </PageContainer>
         );
     }
 
-
     if (error || !data) {
         return (
-            <div className="p-6">
-                <h1 className="text-2xl font-bold text-red-500">
-                    Application not found
-                </h1>
-                <p className="mt-2 text-muted-foreground">
-                    The application you are looking for might have been deleted or you don't have access to it.
-                </p>
-            </div>
+            <PageContainer>
+                <Link
+                    href="/applications"
+                    className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+                >
+                    <ArrowLeft className="size-4" />
+                    Back to applications
+                </Link>
+                <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-8">
+                    <h1 className="text-xl font-semibold text-destructive">
+                        Application not found
+                    </h1>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                        It may have been removed or you may not have access.
+                    </p>
+                </div>
+            </PageContainer>
         );
     }
 
@@ -180,15 +203,22 @@ export default function ApplicationDetailPage({
         "APPLIED";
 
     return (
-        <div className="space-y-6 p-6">
-            <div className="rounded-2xl border border-border bg-card p-6">
+        <PageContainer>
+            <Link
+                href="/applications"
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+                <ArrowLeft className="size-4" />
+                Back to applications
+            </Link>
+
+            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-[var(--shadow-soft)]">
                 <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-                    <div>
-                        <h1 className="text-3xl font-bold">
+                    <div className="space-y-1">
+                        <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
                             {data.role}
                         </h1>
-
-                        <p className="mt-2 text-lg text-muted-foreground">
+                        <p className="text-lg text-muted-foreground">
                             {data.company}
                         </p>
                     </div>
@@ -199,44 +229,29 @@ export default function ApplicationDetailPage({
                     />
                 </div>
 
-                <div className="mt-6 grid gap-4 md:grid-cols-3">
-                    <div className="rounded-xl border border-border bg-background p-4">
-                        <p className="text-sm text-muted-foreground">
-                            Platform
-                        </p>
-
-                        <p className="mt-1 font-medium">
-                            {data.platform ||
-                                "Not specified"}
-                        </p>
-                    </div>
-
-                    <div className="rounded-xl border border-border bg-background p-4">
-                        <p className="text-sm text-muted-foreground">
-                            Location
-                        </p>
-
-                        <p className="mt-1 font-medium">
-                            {data.location ||
-                                "Not specified"}
-                        </p>
-                    </div>
-
-                    <div className="rounded-xl border border-border bg-background p-4">
-                        <p className="text-sm text-muted-foreground">
-                            Salary
-                        </p>
-
-                        <p className="mt-1 font-medium">
-                            {data.salary ||
-                                "Not specified"}
-                        </p>
-                    </div>
+                <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                    {[
+                        { label: "Platform", value: data.platform },
+                        { label: "Location", value: data.location },
+                        { label: "Salary", value: data.salary },
+                    ].map((item) => (
+                        <div
+                            key={item.label}
+                            className="rounded-xl border border-border/50 bg-muted/30 px-4 py-3"
+                        >
+                            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                {item.label}
+                            </p>
+                            <p className="mt-1 text-sm font-medium">
+                                {item.value || "Not specified"}
+                            </p>
+                        </div>
+                    ))}
                 </div>
             </div>
 
-            <div className="rounded-2xl border border-border bg-card p-6">
-                <div className="mb-4 flex items-center justify-between">
+            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-[var(--shadow-soft)]">
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                     <h2 className="text-lg font-semibold">
                         Notes
                     </h2>
@@ -269,7 +284,7 @@ export default function ApplicationDetailPage({
                 />
             </div>
 
-            <div className="rounded-2xl border border-border bg-card p-6">
+            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-[var(--shadow-soft)]">
                 <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-lg font-semibold">
                         Interview
@@ -291,72 +306,42 @@ export default function ApplicationDetailPage({
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
-
                     <div className="space-y-2">
-                        <label className="text-sm text-muted-foreground">
-                            Interview Date
-                        </label>
-
-                        <input
+                        <Label htmlFor="interview-date">Interview date</Label>
+                        <Input
+                            id="interview-date"
                             type="datetime-local"
                             value={interviewDate}
                             disabled={!canEditInterview}
                             onChange={(e) =>
-                                setInterviewDate(
-                                    e.target.value,
-                                )
+                                setInterviewDate(e.target.value)
                             }
-                            className="
-                    w-full
-                    rounded-xl
-                    border
-                    border-border
-                    bg-background
-                    px-3
-                    py-2
-                    text-sm
-                "
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm text-muted-foreground">
-                            Interview Type
-                        </label>
-
-                        <input
+                        <Label htmlFor="interview-type">Interview type</Label>
+                        <Input
+                            id="interview-type"
                             type="text"
-                            placeholder="HR Round, Technical, OA..."
+                            placeholder="HR round, technical, OA..."
                             value={interviewType}
                             disabled={!canEditInterview}
                             onChange={(e) =>
-                                setInterviewType(
-                                    e.target.value,
-                                )
+                                setInterviewType(e.target.value)
                             }
-                            className="
-                    w-full
-                    rounded-xl
-                    border
-                    border-border
-                    bg-background
-                    px-3
-                    py-2
-                    text-sm
-                "
                         />
                     </div>
 
                     {!canEditInterview && (
-                        <p className="mt-4 text-sm text-muted-foreground">
-                            Interview details can be added once the application status moves beyond APPLIED.
+                        <p className="col-span-full text-sm text-muted-foreground">
+                            Move the status beyond Applied to schedule interview details.
                         </p>
                     )}
-
                 </div>
             </div>
 
-            <div className="rounded-2xl border border-border bg-card p-6">
+            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-[var(--shadow-soft)]">
                 <h2 className="mb-4 text-lg font-semibold">
                     Job Link
                 </h2>
@@ -365,22 +350,10 @@ export default function ApplicationDetailPage({
                     <Link
                         href={data.jobUrl}
                         target="_blank"
-                        className="
-                        inline-flex
-                        items-center
-                        rounded-xl
-                        border
-                        border-border
-                        bg-background
-                        px-4
-                        py-2
-                        text-sm
-                        font-medium
-                        transition-colors
-                        hover:bg-muted
-                    "
+                        className="inline-flex items-center gap-2 rounded-xl border border-border/60 bg-muted/30 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent"
                     >
-                        Open Job Posting
+                        Open job posting
+                        <ExternalLink className="size-4" />
                     </Link>
                 ) : (
                     <p className="text-muted-foreground">
@@ -389,9 +362,9 @@ export default function ApplicationDetailPage({
                 )}
             </div>
 
-            <div className="rounded-2xl border border-border bg-card p-6">
+            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-[var(--shadow-soft)]">
                 <h2 className="mb-6 text-lg font-semibold">
-                    Activity Timeline
+                    Activity timeline
                 </h2>
 
                 {!data.activities ||
@@ -447,18 +420,15 @@ export default function ApplicationDetailPage({
                 )}
             </div>
 
-            <div className="rounded-2xl border border-border bg-card p-6">
-                <h2 className="mb-4 text-lg font-semibold">
-                    Created
-                </h2>
-
-                <p className="text-muted-foreground">
-                    {new Date(
-                        data.createdAt,
-                    ).toLocaleDateString()}
-                </p>
+            <div className="rounded-2xl border border-border/60 bg-muted/20 px-6 py-4 text-sm text-muted-foreground">
+                Added on{" "}
+                <span className="font-medium text-foreground">
+                    {new Date(data.createdAt).toLocaleDateString(undefined, {
+                        dateStyle: "long",
+                    })}
+                </span>
             </div>
-        </div>
+        </PageContainer>
     );
 }
 
