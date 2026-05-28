@@ -380,7 +380,7 @@ export default function ApplicationDetailPage({
                                     key={activity.id}
                                     className="relative border-l border-border pl-5"
                                 >
-                                    <div className="absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full bg-primary" />
+                                    <div className="absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full" />
 
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="flex items-center gap-2">
