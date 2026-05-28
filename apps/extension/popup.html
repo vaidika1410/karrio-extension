@@ -1,298 +1,568 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-  <title>Karrio</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      width: 360px;
-      margin: 0;
-      padding: 16px;
-
-      background: #0f172a;
-      color: white;
-
-      font-family:
-        Inter,
-        Arial,
-        sans-serif;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .header {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .title {
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .subtitle {
-      color: #94a3b8;
-      font-size: 13px;
-    }
-
-    .card {
-      background: #111827;
-
-      border: 1px solid #1e293b;
-
-      border-radius: 16px;
-
-      padding: 16px;
-
-      display: flex;
-      flex-direction: column;
-
-      gap: 14px;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .label {
-      font-size: 12px;
-      color: #94a3b8;
-    }
-
-    input {
-      width: 100%;
-
-      border: 1px solid #1e293b;
-
-      background: #0f172a;
-
-      color: white;
-
-      padding: 12px;
-
-      border-radius: 12px;
-
-      outline: none;
-
-      font-size: 14px;
-    }
-
-    input:focus {
-      border-color: #6366f1;
-    }
-
-    button {
-      border: none;
-
-      background: #6366f1;
-
-      color: white;
-
-      padding: 14px;
-
-      border-radius: 12px;
-
-      cursor: pointer;
-
-      font-weight: 600;
-
-      font-size: 14px;
-
-      transition: 0.2s;
-    }
-
-    button:hover {
-      background: #5855eb;
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.75;
-    }
-
-    .footer {
-      text-align: center;
-
-      font-size: 12px;
-
-      color: #64748b;
-    }
-
-    .status {
-      font-size: 12px;
-      font-weight: 500;
-    }
-
-    .status.success {
-      color: #22c55e;
-    }
-
-    .status.error {
-      color: #ef4444;
-    }
-
-    .auth-status {
-      font-size: 12px;
-      line-height: 1.4;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #1e293b;
-      background: #0f172a;
-    }
-
-    .auth-status.connected {
-      color: #22c55e;
-      border-color: rgba(34, 197, 94, 0.25);
-      background: rgba(34, 197, 94, 0.08);
-    }
-
-    .auth-status.disconnected {
-      color: #fbbf24;
-      border-color: rgba(251, 191, 36, 0.25);
-      background: rgba(251, 191, 36, 0.08);
-    }
-
-    .auth-status.checking {
-      color: #94a3b8;
-    }
-
-    .auth-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .link-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid #334155;
-      color: #e2e8f0;
-      font-size: 12px;
-      font-weight: 600;
-      text-decoration: none;
-      background: transparent;
-      cursor: pointer;
-    }
-
-    .link-button:hover {
-      background: #1e293b;
-    }
-
-
-    textarea {
-      width: 100%;
-
-      border: 1px solid #1e293b;
-
-      background: #0f172a;
-
-      color: white;
-
-      padding: 12px;
-
-      border-radius: 12px;
-
-      outline: none;
-
-      font-size: 14px;
-
-      resize: vertical;
-
-      min-height: 80px;
-
-      font-family: inherit;
-    }
-
-    textarea:focus {
-      border-color: #6366f1;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <div class="header">
-      <div class="title">
-        Karrio
+  <head>
+    <title>Karrio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap"
+      rel="stylesheet" />
+
+    <style>
+      :root {
+        --bg: #f7fbf8;
+        --surface: rgba(255, 255, 255, 0.82);
+        --surface-2: rgba(236, 247, 242, 0.82);
+
+        --border: rgba(29, 76, 66, 0.12);
+        --border-hi: rgba(0, 125, 101, 0.24);
+
+        --accent: #007d65;
+        --accent-hi: #099776;
+
+        --accent-glow: rgba(0, 125, 101, 0.14);
+
+        --text: #24322f;
+
+        --muted: #667a73;
+        --muted-hi: #3b5e55;
+        --radius: 16px;
+        --radius-sm: 10px;
+        --shadow-soft:
+          0 1px 2px rgba(23, 45, 40, 0.06), 0 12px 34px rgba(23, 45, 40, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        width: 380px;
+        height: 560px;
+        background:
+          radial-gradient(
+            ellipse 85% 55% at 100% -15%,
+            rgba(0, 125, 101, 0.16),
+            transparent 56%
+          ),
+          radial-gradient(
+            ellipse 75% 50% at -15% 110%,
+            rgba(94, 179, 158, 0.14),
+            transparent 48%
+          ),
+          var(--bg);
+        color: var(--text);
+        font-family: "Geist", system-ui, sans-serif;
+        font-size: 14px;
+        -webkit-font-smoothing: antialiased;
+        overflow: hidden;
+      }
+
+      /* scroll container */
+      .container {
+        width: 380px;
+        height: 560px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* background texture */
+      .container::before,
+      .container::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .container::before {
+        inset: 0;
+        background-image: radial-gradient(
+          rgba(0, 125, 101, 0.12) 1px,
+          transparent 1px
+        );
+        background-size: 20px 20px;
+        mask-image: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.72),
+          transparent 76%
+        );
+        opacity: 0.28;
+      }
+
+      .container::after {
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.36),
+          transparent 34%
+        );
+      }
+
+      /* header */
+      .header {
+        position: relative;
+        z-index: 1;
+        padding: 18px 18px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        background: rgba(0, 125, 101, 0.11);
+        border: 1px solid rgba(0, 125, 101, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .logo-mark svg {
+        width: 16px;
+        height: 16px;
+        color: var(--accent);
+      }
+
+      .header-titles {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+
+      .title {
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--text);
+        line-height: 1;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        font-size: 11.5px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+
+      /* divider */
+      .divider {
+        position: relative;
+        z-index: 1;
+        margin: 14px 18px 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--border-hi),
+          transparent
+        );
+      }
+
+      /* card */
+      .card {
+        position: relative;
+        z-index: 1;
+        margin: 12px 12px 0;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: var(--shadow-soft);
+        backdrop-filter: blur(14px);
+      }
+
+      /* inner top shimmer line on card */
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 20px;
+        right: 20px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 125, 101, 0.28),
+          transparent
+        );
+        border-radius: 1px;
+      }
+
+      /* field */
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--muted-hi);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      /* inputs */
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--border-hi);
+        background: rgba(255, 255, 255, 0.78);
+        color: var(--text);
+        padding: 8px 10px;
+        border-radius: var(--radius-sm);
+        outline: none;
+        font-size: 13.5px;
+        font-family: inherit;
+        transition:
+          border-color 0.18s ease,
+          box-shadow 0.18s ease;
+        line-height: 1.5;
+      }
+
+      input::placeholder,
+      textarea::placeholder {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-glow);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 56px;
+        max-height: 88px;
+      }
+
+      /* auth status */
+      .auth-status {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.45;
+        padding: 9px 12px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        background: rgba(247, 251, 248, 0.76);
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      /* status dot */
+      .auth-status::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: var(--muted);
+      }
+
+      .auth-status.connected {
+        color: #08755f;
+        border-color: rgba(0, 125, 101, 0.2);
+        background: rgba(0, 125, 101, 0.07);
+      }
+
+      .auth-status.connected::before {
+        background: var(--accent);
+        box-shadow: 0 0 0 3px rgba(0, 125, 101, 0.14);
+        animation: pulse-dot 2s ease infinite;
+      }
+
+      .auth-status.disconnected {
+        color: #fbbf24;
+        border-color: rgba(251, 191, 36, 0.2);
+        background: rgba(251, 191, 36, 0.06);
+      }
+
+      .auth-status.disconnected::before {
+        background: #fbbf24;
+      }
+
+      .auth-status.checking {
+        color: var(--muted-hi);
+      }
+
+      @keyframes pulse-dot {
+        0%,
+        100% {
+          box-shadow: 0 0 0 3px rgba(0, 125, 101, 0.14);
+        }
+
+        50% {
+          box-shadow: 0 0 0 5px rgba(0, 125, 101, 0);
+        }
+      }
+
+      /* auth actions */
+      .auth-actions {
+        display: flex;
+        gap: 6px;
+        flex-wrap: nowrap;
+      }
+
+      .link-button {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        padding: 7px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border-hi);
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 600;
+        font-family: inherit;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition:
+          border-color 0.16s ease,
+          color 0.16s ease,
+          background 0.16s ease;
+      }
+
+      .link-button:hover {
+        border-color: rgba(0, 125, 101, 0.34);
+        color: var(--accent-hi);
+        background: rgba(0, 125, 101, 0.07);
+      }
+
+      /* save button */
+      button#saveJob {
+        border: none;
+        background: var(--accent);
+        color: white;
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13.5px;
+        font-family: inherit;
+        letter-spacing: 0.01em;
+        transition:
+          background 0.18s ease,
+          box-shadow 0.18s ease,
+          transform 0.12s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* sweep shimmer on button */
+      button#saveJob::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.12),
+          transparent
+        );
+        transform: skewX(-15deg);
+        transition: left 0.5s ease;
+      }
+
+      button#saveJob:hover {
+        background: var(--accent-hi);
+        box-shadow:
+          0 0 0 3px var(--accent-glow),
+          0 8px 18px rgba(0, 125, 101, 0.22);
+        transform: translateY(-1px);
+      }
+
+      button#saveJob:hover::after {
+        left: 140%;
+      }
+
+      button#saveJob:active {
+        transform: translateY(0);
+        box-shadow: 0 0 0 2px var(--accent-glow);
+      }
+
+      button#saveJob:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* status message */
+      .status {
+        font-size: 12px;
+        font-weight: 500;
+        min-height: 16px;
+        text-align: center;
+      }
+
+      .status.success {
+        color: #08755f;
+      }
+
+      .status.error {
+        color: #f87171;
+      }
+
+      /* thin separator inside card */
+      .card-sep {
+        height: 1px;
+        background: var(--border);
+        margin: 0 -14px;
+      }
+
+      /* footer */
+      .footer {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        font-size: 11px;
+        color: var(--muted);
+        padding: 10px 18px 14px;
+        letter-spacing: 0.02em;
+      }
+
+      /* stagger-in animation for card fields */
+      @keyframes fade-up {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .field {
+        animation: fade-up 0.3s ease both;
+      }
+
+      .field:nth-child(1) {
+        animation-delay: 0.05s;
+      }
+
+      .field:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+
+      .field:nth-child(3) {
+        animation-delay: 0.15s;
+      }
+
+      .field:nth-child(4) {
+        animation-delay: 0.2s;
+      }
+
+      button#saveJob {
+        animation: fade-up 0.3s ease 0.25s both;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- header -->
+      <div class="header">
+        <div class="header-left">
+          <div class="logo-mark">
+            <!-- sparkles icon -->
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path
+                d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+            </svg>
+          </div>
+          <div class="header-titles">
+            <div class="title">Karrio</div>
+            <div class="subtitle">Save jobs instantly</div>
+          </div>
+        </div>
       </div>
 
-      <div class="subtitle">
-        Save jobs instantly
+      <div class="divider"></div>
+
+      <!-- form card -->
+      <div class="card">
+        <div class="field">
+          <div class="label">Job Role</div>
+          <input id="role" placeholder="Frontend Engineer" />
+        </div>
+
+        <div class="field">
+          <div class="label">Company</div>
+          <input id="company" placeholder="Google" />
+        </div>
+
+        <div class="card-sep"></div>
+
+        <div class="field">
+          <div class="label">Account</div>
+          <div id="authStatus" class="auth-status checking">
+            Checking Karrio sign-in...
+          </div>
+          <div class="auth-actions">
+            <a
+              id="openKarrio"
+              class="link-button"
+              href="http://localhost:3001/login">
+              Open Karrio
+            </a>
+            <button id="refreshAuth" type="button" class="link-button">
+              Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="card-sep"></div>
+
+        <div class="field">
+          <div class="label">Notes</div>
+          <textarea id="notes" placeholder="Optional notes"></textarea>
+        </div>
+
+        <button id="saveJob">Save to Karrio</button>
+
+        <div id="status" class="status"></div>
       </div>
+
+      <!-- footer -->
+      <div class="footer">Karrio Extension</div>
     </div>
 
-    <div class="card">
-      <div class="field">
-        <div class="label">
-          Job Role
-        </div>
-
-        <input id="role" placeholder="Frontend Engineer" />
-      </div>
-
-      <div class="field">
-        <div class="label">
-          Company
-        </div>
-
-        <input id="company" placeholder="Google" />
-      </div>
-
-      <div class="field">
-        <div class="label">
-          Account
-        </div>
-
-        <div id="authStatus" class="auth-status checking">
-          Checking Karrio sign-in...
-        </div>
-
-        <div class="auth-actions">
-          <a id="openKarrio" class="link-button" href="http://localhost:3001/login">
-            Open Karrio
-          </a>
-          <button id="refreshAuth" type="button" class="link-button">
-            Refresh sign-in
-          </button>
-        </div>
-      </div>
-
-      <div class="field">
-        <div class="label">
-          Notes
-        </div>
-
-        <textarea id="notes" placeholder="Optional notes..."></textarea>
-      </div>
-
-      <button id="saveJob">
-        Save to Karrio
-      </button>
-
-      <div id="status" class="status"></div>
-    </div>
-
-    <div class="footer">
-      Karrio Extension MVP
-    </div>
-  </div>
-
-  <script src="popup.js"></script>
-</body>
-
+    <script src="popup.js"></script>
+  </body>
 </html>
