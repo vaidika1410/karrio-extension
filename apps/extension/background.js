@@ -1,7 +1,7 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://karrio-api-o2xy.onrender.com";
+const API_BASE_URL = "https://karrio-api-o2xy.onrender.com";
 
 const WEB_APP_URLS = [
-  "https://karrio-extension-web.vercel.app/login",
+  "https://karrio-extension-web.vercel.app",
 ];
 
 function isKarrioWebUrl(url) {

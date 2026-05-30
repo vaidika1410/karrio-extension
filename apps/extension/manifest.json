@@ -1,41 +1,33 @@
 {
   "manifest_version": 3,
-
   "name": "Karrio",
-
   "version": "1.0.0",
-
   "description": "Save job applications to Karrio",
-
   "permissions": [
     "activeTab",
     "storage",
     "scripting",
     "tabs"
   ],
-
   "host_permissions": [
     "https://www.linkedin.com/*",
-    "http://localhost:3000/*",
-    "http://127.0.0.1:3000/*",
-    "http://localhost:3001/*",
-    "http://127.0.0.1:3001/*"
+    "https://karrio-extension-web.vercel.app/*",
+    "https://karrio-api-o2xy.onrender.com/*"
   ],
-
   "background": {
     "service_worker": "background.js"
   },
-
   "action": {
     "default_popup": "popup.html"
   },
-
   "content_scripts": [
     {
       "matches": [
         "https://www.linkedin.com/*"
       ],
-      "js": ["content.js"]
+      "js": [
+        "content.js"
+      ]
     },
     {
       "matches": [
@@ -44,7 +36,9 @@
         "http://localhost:3000/*",
         "http://127.0.0.1:3000/*"
       ],
-      "js": ["content-karrio.js"],
+      "js": [
+        "content-karrio.js"
+      ],
       "run_at": "document_idle"
     }
   ]
