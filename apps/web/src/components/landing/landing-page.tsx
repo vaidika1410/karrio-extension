@@ -464,6 +464,16 @@ export function LandingPage() {
                 Get started <ArrowRight className="size-3.5 arrow-icon" />
               </Link>
             </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              asChild
+              className="border-border/70 transition-all duration-200 hover:border-primary/35 hover:bg-primary/5 hover:shadow-[0_0_0_4px_hsl(var(--primary)/0.06)]"
+            >
+              <Link href="/extension">
+                Get Extension
+              </Link>
+            </Button>
           </nav>
         </header>
 
@@ -521,6 +531,10 @@ export function LandingPage() {
                   </Link>
                 </Button>
 
+                <Button size="lg" variant="outline" asChild
+                  className="border-border/70 transition-all duration-200 hover:border-primary/35 hover:bg-primary/5 hover:shadow-[0_0_0_4px_hsl(var(--primary)/0.06)]">
+                  <Link href="/extension">Get Extension</Link>
+                </Button>
 
                 <Button size="lg" variant="outline" asChild
                   className="border-border/70 transition-all duration-200 hover:border-primary/35 hover:bg-primary/5 hover:shadow-[0_0_0_4px_hsl(var(--primary)/0.06)]">
