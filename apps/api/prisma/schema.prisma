@@ -72,6 +72,13 @@ model ApplicationActivity {
   application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 }
 
+enum ReminderType {
+  INTERVIEW
+  FOLLOW_UP
+  DEADLINE
+  NETWORKING
+}
+
 model Reminder {
   id String @id @default(cuid())
 
@@ -83,7 +90,7 @@ model Reminder {
 
   sent Boolean @default(false)
 
-  type String
+  type ReminderType
 
   createdAt DateTime @default(now())
 

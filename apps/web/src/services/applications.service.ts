@@ -49,3 +49,21 @@ export async function getUpcomingInterviews() {
 
   return response.data;
 }
+
+export async function getApplicationReminders(
+  applicationId: string,
+) {
+  const response =
+    await api.get(
+      `/reminders/application/${applicationId}`,
+    );
+
+  return response.data;
+}
+
+export async function getPendingReminders() {
+  const response =
+    await api.get("/reminders");
+
+  return response.data;
+}

@@ -6,24 +6,21 @@ import { differenceInMinutes } from "date-fns";
 import { BellRing } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getUpcomingInterviews } from "@/services/applications.service";
+import { getPendingReminders } from "@/services/applications.service";
 import { cn } from "@/lib/utils";
 
 export function InterviewReminders() {
   const { data = [] } = useQuery({
-    queryKey: ["upcoming-interviews"],
-    queryFn: getUpcomingInterviews,
+    queryKey: ["pending-reminders"],
+    queryFn: getPendingReminders,
   });
 
-  const reminders = data.filter((interview: { interviewDate?: string }) => {
-    if (!interview.interviewDate) return false;
+  const reminders = data.filter((reminder: { remindAt?: string }) => {
+    if (!reminder.remindAt) return false;
 
-    const minutesLeft = differenceInMinutes(
-      new Date(interview.interviewDate),
-      new Date(),
-    );
+    const minutesLeft = differenceInMinutes(new Date(reminder.remindAt), new Date());
 
-    return minutesLeft > 0 && minutesLeft <= 24 * 60;
+    return minutesLeft > 0;
   });
 
   if (!reminders.length) return null;
@@ -36,9 +33,7 @@ export function InterviewReminders() {
         </div>
         <div>
           <CardTitle className="text-lg font-semibold">Reminders</CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Interviews coming up in the next 24 hours
-          </p>
+          <p className="text-sm text-muted-foreground">Upcoming reminders from your applications</p>
         </div>
       </CardHeader>
 
@@ -46,21 +41,24 @@ export function InterviewReminders() {
         {reminders.map(
           (reminder: {
             id: string;
-            company: string;
-            role: string;
-            interviewType?: string;
-            interviewDate: string;
+            title: string;
+            type: string;
+            message?: string;
+            remindAt: string;
+            application?: {
+              id: string;
+              company: string;
+              role: string;
+            };
           }) => {
-            const minutesLeft = differenceInMinutes(
-              new Date(reminder.interviewDate),
-              new Date(),
-            );
+            const minutesLeft = differenceInMinutes(new Date(reminder.remindAt), new Date());
             const isUrgent = minutesLeft <= 60;
+            const applicationId = reminder.application?.id;
 
             return (
               <Link
                 key={reminder.id}
-                href={`/applications/${reminder.id}`}
+                href={applicationId ? `/applications/${applicationId}` : "/dashboard"}
                 className={cn(
                   "flex items-start justify-between gap-4 rounded-xl border p-4 transition-colors",
                   isUrgent
@@ -69,14 +67,14 @@ export function InterviewReminders() {
                 )}
               >
                 <div className="min-w-0">
-                  <p className="font-medium">{reminder.company}</p>
+                  <p className="font-medium">{reminder.title}</p>
                   <p className="text-sm text-muted-foreground">
-                    {reminder.role}
+                    {reminder.application
+                      ? `${reminder.application.company} - ${reminder.application.role}`
+                      : reminder.message || "Reminder"}
                   </p>
-                  {reminder.interviewType ? (
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {reminder.interviewType}
-                    </p>
+                  {reminder.message && reminder.application ? (
+                    <p className="mt-1 text-xs text-muted-foreground">{reminder.message}</p>
                   ) : null}
                 </div>
 
@@ -84,7 +82,9 @@ export function InterviewReminders() {
                   <p
                     className={cn(
                       "text-sm font-semibold",
-                      isUrgent ? "text-red-600 dark:text-red-400" : "text-amber-700 dark:text-amber-300",
+                      isUrgent
+                        ? "text-red-600 dark:text-red-400"
+                        : "text-amber-700 dark:text-amber-300",
                     )}
                   >
                     {minutesLeft < 60
@@ -92,7 +92,7 @@ export function InterviewReminders() {
                       : `${Math.floor(minutesLeft / 60)}h left`}
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {new Date(reminder.interviewDate).toLocaleString()}
+                    {new Date(reminder.remindAt).toLocaleString()}
                   </p>
                 </div>
               </Link>

@@ -2,10 +2,15 @@ import { PrismaService } from "../prisma/prisma.service";
 import { CreateApplicationDto } from "./dto/create-application.dto";
 import { Injectable, NotFoundException, BadRequestException } from "@nestjs/common";
 import { UpdateApplicationDto } from "./dto/update-application.dto";
+import { RemindersService } from "../reminders/reminders.service";
 
 @Injectable()
 export class ApplicationsService {
-  constructor(private prisma: PrismaService) { }
+  constructor(
+    private prisma: PrismaService,
+
+    private remindersService: RemindersService,
+  ) { }
 
   async create(
     userId: string,
@@ -67,27 +72,27 @@ export class ApplicationsService {
   }
 
   async getUpcomingInterviews(
-  userId: string,
-) {
-  return this.prisma.application.findMany({
-    where: {
-      userId,
+    userId: string,
+  ) {
+    return this.prisma.application.findMany({
+      where: {
+        userId,
 
-      interviewDate: {
-        not: null,
-        gte: new Date(),
+        interviewDate: {
+          not: null,
+          gte: new Date(),
+        },
+
+        status: "INTERVIEW",
       },
 
-      status: "INTERVIEW",
-    },
+      orderBy: {
+        interviewDate: "asc",
+      },
 
-    orderBy: {
-      interviewDate: "asc",
-    },
-
-    take: 5,
-  });
-}
+      take: 5,
+    });
+  }
 
   async findOne(userId: string, applicationId: string) {
     const application =
@@ -154,23 +159,43 @@ export class ApplicationsService {
           reminderTime.getHours() - 1,
         );
 
-        await this.prisma.reminder.create({
-          data: {
-            title:
-              "Upcoming Interview",
+        if (
+          updateApplicationDto.interviewDate
+        ) {
+          const application =
+            await this.prisma.application.findUnique({
+              where: {
+                id: applicationId,
+              },
+            });
 
-            message: `${application.company} • ${application.role} interview starts in 1 hour`,
+          if (application) {
+            const reminderTime =
+              new Date(
+                updateApplicationDto.interviewDate,
+              );
 
-            remindAt:
-              reminderTime,
+            reminderTime.setHours(
+              reminderTime.getHours() - 1,
+            );
 
-            type: "INTERVIEW",
+            await this.remindersService.createReminder({
+              title:
+                "Upcoming Interview",
 
-            applicationId,
+              message: `${application.company} • ${application.role} interview starts in 1 hour`,
 
-            userId,
-          },
-        });
+              remindAt:
+                reminderTime,
+
+              type: "INTERVIEW",
+
+              applicationId,
+
+              userId,
+            });
+          }
+        }
       }
     }
 
@@ -217,6 +242,28 @@ export class ApplicationsService {
       where: {
         id: applicationId,
       },
+    });
+  }
+
+  async getPendingReminders(
+    userId: string,
+  ) {
+    return this.prisma.reminder.findMany({
+      where: {
+        userId,
+
+        sent: false,
+      },
+
+      include: {
+        application: true,
+      },
+
+      orderBy: {
+        remindAt: "asc",
+      },
+
+      take: 10,
     });
   }
 }
