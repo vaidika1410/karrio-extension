@@ -1,5 +1,5 @@
-const API_BASE_URL = "http://localhost:3000";
-const WEB_APP_URL = "http://localhost:3001/login";
+const API_BASE_URL = "https://karrio-api-o2xy.onrender.com";
+const WEB_APP_URL = "https://karrio-extension-web.vercel.app/login";
 
 async function getCurrentTab() {
   const [tab] = await chrome.tabs.query({
