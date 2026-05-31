@@ -1,12 +1,12 @@
 {
-  "name": "extension",
-  "displayName": "Extension",
+  "name": "karrio-extension",
+  "displayName": "Karrio",
   "version": "1.0.0",
-  "description": "Karrio extension",
+  "description": "Save job applications to Karrio",
   "author": "Vaidika",
   "scripts": {
     "dev": "plasmo dev",
-    "build": "plasmo build",
+    "build": "plasmo build && node fix-manifest.js",
     "package": "plasmo package"
   },
   "dependencies": {
@@ -22,10 +22,5 @@
     "@types/react-dom": "18.2.18",
     "prettier": "3.2.4",
     "typescript": "5.3.3"
-  },
-  "manifest": {
-    "host_permissions": [
-      "https://*/*"
-    ]
   }
 }

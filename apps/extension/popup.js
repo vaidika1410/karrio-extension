@@ -78,17 +78,28 @@ async function initializePopup() {
   await refreshAuthStatus();
 
   const tab = await getCurrentTab();
+  if (!tab || !tab.id) {
+    setSaveStatus("error", "Error: Could not find active tab.");
+    return;
+  }
+  
+  if (!tab.url || !tab.url.includes("linkedin.com")) {
+      setSaveStatus("error", "Error: Open a LinkedIn job page to extract data.");
+      return;
+  }
 
   chrome.tabs.sendMessage(
     tab.id,
     { type: "GET_JOB_DATA" },
     async (response) => {
       if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError.message);
+        setSaveStatus("error", "Error: " + chrome.runtime.lastError.message);
+        console.error("Content script error:", chrome.runtime.lastError.message);
         return;
       }
 
       if (!response) {
+        setSaveStatus("error", "Error: No data received from page.");
         return;
       }
 
