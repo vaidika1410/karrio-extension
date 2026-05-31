@@ -1,32 +1,35 @@
-const fs = require("fs");
+const fs = require('fs');
+const path = require('path');
+const archiver = require('archiver');
 
-async function createZip() {
-  const { ZipArchive } = await import("archiver");
+const output = fs.createWriteStream(path.join(__dirname, 'karrio-extension-dist.zip'));
+const archive = archiver('zip', { zlib: { level: 9 } });
 
-  const output = fs.createWriteStream(
-    __dirname + "/karrio-extension-dist.zip"
-  );
+archive.pipe(output);
 
-  const archive = new ZipArchive({
-    zlib: { level: 9 },
-  });
+// Exclude build artifacts and unnecessary files
+const excluded = [
+    'node_modules/**',
+    '.git/**',
+    '.plasmo/**',
+    '.turbo/**',
+    'build/**',
+    'karrio-extension-dist.zip',
+    'package-dist.js'
+];
 
-  archive.pipe(output);
-
-  archive.glob("**/*", {
+archive.glob('**/*', {
     cwd: __dirname,
-    ignore: [
-      "node_modules/**",
-      ".git/**",
-      ".plasmo/**",
-      ".turbo/**",
-      "build/**",
-      "karrio-extension-dist.zip",
-      "package-dist.js",
-    ],
-  });
+    ignore: excluded
+});
 
-  await archive.finalize();
-}
+archive.finalize();
 
-createZip().catch(console.error);
+output.on('close', function () {
+    console.log(archive.pointer() + ' total bytes');
+    console.log('Zip generated successfully.');
+});
+
+archive.on('error', function (err) {
+    throw err;
+});
