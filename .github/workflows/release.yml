@@ -29,16 +29,15 @@ jobs:
       - name: Build and Package Extension
         run: |
           cd apps/extension
+          pnpm install
           pnpm build
-          pnpm package
-          echo "Listing build directory contents:"
-          ls -R build/
+          pnpm build-dist
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: apps/extension/build/chrome-mv3-prod.zip
+          files: apps/extension/karrio-extension-dist.zip
           draft: false
           prerelease: false
           generate_release_notes: true

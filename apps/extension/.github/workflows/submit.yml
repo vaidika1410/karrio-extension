@@ -26,9 +26,9 @@ jobs:
       - name: Build the extension
         run: pnpm build
       - name: Package the extension into a zip artifact
-        run: pnpm package
+        run: pnpm build-dist
       - name: Browser Platform Publish
         uses: PlasmoHQ/bpp@v3
         with:
           keys: ${{ secrets.SUBMIT_KEYS }}
-          artifact: build/chrome-mv3-prod.zip
+          artifact: karrio-extension-dist.zip
