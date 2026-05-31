@@ -26,7 +26,7 @@ import {
   LandingStyles,
 } from "@/components/landing/shared-visuals";
 
-const EXTENSION_DOWNLOAD_URL = "REPLACE_WITH_GITHUB_RELEASE_URL";
+const EXTENSION_DOWNLOAD_URL = "https://github.com/vaidika1410/karrio-extension/releases/latest/download/chrome-mv3-prod.zip";
 
 const howItWorks = [
   {
