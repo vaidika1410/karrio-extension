@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,13 +30,15 @@ jobs:
         run: |
           cd apps/extension
           pnpm build
-          pnpm package
+          pnpm package -- --browser=chrome
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
           files: apps/extension/build/chrome-mv3-prod.zip
+          draft: false
+          prerelease: false
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

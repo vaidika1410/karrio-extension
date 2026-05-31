@@ -1,7 +1,7 @@
 {
   "name": "extension",
   "displayName": "Extension",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Karrio extension",
   "author": "Vaidika",
   "scripts": {
