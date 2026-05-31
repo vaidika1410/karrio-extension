@@ -12,15 +12,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v2
         with:
           version: 8
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: "pnpm"
 
       - name: Install dependencies
@@ -29,8 +29,8 @@ jobs:
       - name: Build and Package Extension
         run: |
           cd apps/extension
-          pnpm build -- --browser=chrome
-          pnpm package -- --browser=chrome
+          pnpm build
+          pnpm package
           echo "Listing build directory contents:"
           ls -R build/
 
