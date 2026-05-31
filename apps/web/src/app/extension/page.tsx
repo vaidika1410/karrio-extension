@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -85,6 +86,12 @@ const steps = [
 ];
 
 export default function ExtensionPage() {
+  const installationRef = useRef<HTMLElement>(null);
+
+  const scrollToInstallation = () => {
+    installationRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <>
       <LandingStyles />
@@ -101,7 +108,7 @@ export default function ExtensionPage() {
         <RingOrnament className="absolute -top-16 -right-16 size-72 opacity-60 ring-spin" />
         <RingOrnament className="absolute bottom-24 -left-10 size-44 opacity-40" />
 
-        <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-4 py-6 md:px-8">
+        <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-4 py-6 md:px-8">
           <Link href="/" className="group flex items-center gap-2.5">
             <div className="flex size-9 items-center justify-center rounded-xl bg-primary/15 text-primary transition-all duration-300 group-hover:bg-primary/25 group-hover:scale-105 group-hover:rotate-[-6deg]">
               <Sparkles className="size-4" strokeWidth={2.25} />
@@ -154,9 +161,13 @@ export default function ExtensionPage() {
                     Download Extension <Download className="size-3.5 arrow-icon" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" asChild
-                  className="border-border/70 transition-all duration-200 hover:border-primary/35 hover:bg-primary/5 hover:shadow-[0_0_0_4px_hsl(var(--primary)/0.06)]">
-                  <Link href="#installation">View Installation Guide</Link>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  onClick={scrollToInstallation}
+                  className="border-border/70 transition-all duration-200 hover:border-primary/35 hover:bg-primary/5 hover:shadow-[0_0_0_4px_hsl(var(--primary)/0.06)]"
+                >
+                  View Installation Guide
                 </Button>
               </div>
             </Reveal>
@@ -204,7 +215,7 @@ export default function ExtensionPage() {
           </section>
 
           {/* ══ INSTALLATION GUIDE ══ */}
-          <section id="installation" className="mt-32">
+          <section ref={installationRef} className="mt-32 scroll-mt-20">
             <Reveal delay={0}>
               <p className="mb-8 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary/70">
                 <span className="h-px w-6 bg-primary/30" />
@@ -251,16 +262,40 @@ export default function ExtensionPage() {
                 <p className="relative mx-auto mt-4 max-w-lg text-muted-foreground">
                   Karrio Extension is currently in beta and available through manual installation.
                 </p>
+                
+                <div className="relative mt-8">
+                  <Button size="lg" asChild>
+                    <Link href={EXTENSION_DOWNLOAD_URL} target="_blank" className="arrow-link gap-2">
+                      Download Extension <Download className="size-3.5 arrow-icon" />
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </Reveal>
           </section>
         </main>
 
-        <footer className="relative z-10 border-t border-border/50 py-8 text-center text-sm text-muted-foreground">
-          <span className="inline-flex items-center gap-2">
-            <Sparkles className="size-3.5 text-primary/60" />
-            Karrio — built for focused job seekers
-          </span>
+        <footer className="relative z-20 border-t border-border/40 bg-background/50 py-10 text-center text-sm text-muted-foreground backdrop-blur-md">
+          <div className="mx-auto max-w-6xl px-4 md:px-8">
+            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+              <div className="flex items-center gap-2">
+                <div className="flex size-6 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <Sparkles className="size-3" />
+                </div>
+                <span className="font-medium text-foreground">Karrio</span>
+              </div>
+              
+              <div className="flex items-center gap-6">
+                <Link href="/" className="transition-colors hover:text-primary">Home</Link>
+                <Link href="/login" className="transition-colors hover:text-primary">Sign in</Link>
+                <Link href="/signup" className="transition-colors hover:text-primary">Register</Link>
+              </div>
+
+              <span className="text-xs text-muted-foreground/60">
+                &copy; {new Date().getFullYear()} Karrio. built for focused job seekers.
+              </span>
+            </div>
+          </div>
         </footer>
       </div>
     </>

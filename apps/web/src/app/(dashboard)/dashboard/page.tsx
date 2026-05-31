@@ -5,11 +5,13 @@ import { DashboardOverview } from "@/features/dashboard/components/dashboard-ove
 import { InterviewNotifications } from "@/features/dashboard/components/interview-notifications";
 import { InterviewReminders } from "@/features/dashboard/components/interview-reminders";
 import { UpcomingInterviews } from "@/features/dashboard/components/upcoming-interviews";
+import { ExtensionBanner } from "@/components/extension/extension-banner";
 
 export default function DashboardPage() {
   return (
     <PageContainer>
       <InterviewNotifications />
+      <ExtensionBanner />
 
       <PageHeader
         title="Dashboard"

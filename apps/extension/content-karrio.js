@@ -32,7 +32,14 @@ function syncTokenToExtension() {
   }
 }
 
+// Signal presence to the web app
+function signalPresence() {
+  document.documentElement.dataset.karrioExtensionInstalled = "true";
+  window.dispatchEvent(new CustomEvent("karrio:extension-detected"));
+}
+
 syncTokenToExtension();
+signalPresence();
 
 window.addEventListener("karrio:session-changed", syncTokenToExtension);
 
@@ -43,6 +50,10 @@ window.addEventListener("message", (event) => {
 
   if (event.data?.type === "KARRIO_SESSION_CHANGED") {
     syncTokenToExtension();
+  }
+
+  if (event.data?.type === "KARRIO_CHECK_EXTENSION") {
+    signalPresence();
   }
 });
 
