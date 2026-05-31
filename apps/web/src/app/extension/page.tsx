@@ -26,7 +26,7 @@ import {
   LandingStyles,
 } from "@/components/landing/shared-visuals";
 
-const EXTENSION_DOWNLOAD_URL = "https://github.com/vaidika1410/karrio-extension/releases/latest/download/karrio-extension-dist.zip";
+const EXTENSION_DOWNLOAD_URL = "/downloads/karrio-extension.zip";
 
 const howItWorks = [
   {

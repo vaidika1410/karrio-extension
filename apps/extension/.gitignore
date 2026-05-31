@@ -33,4 +33,5 @@ dist/
 .tsbuildinfo
 
 # build artifacts
+karrio-extension.zip
 *.zip
