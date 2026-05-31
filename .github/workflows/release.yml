@@ -14,9 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: pnpm/action-setup@v2
         with:
-          version: latest
+          version: 8
 
       - uses: actions/setup-node@v3
         with:
@@ -24,13 +24,15 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build and Package Extension
         run: |
           cd apps/extension
-          pnpm build
+          pnpm build -- --browser=chrome
           pnpm package -- --browser=chrome
+          echo "Listing build directory contents:"
+          ls -R build/
 
       - name: Create Release
         id: create_release
