@@ -1,0 +1,1 @@
+ALTER TABLE "Application" ALTER COLUMN "status" SET DEFAULT 'SAVED';

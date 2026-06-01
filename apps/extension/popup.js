@@ -213,6 +213,7 @@ async function saveJob() {
       body: JSON.stringify({
         company: document.getElementById("company").value,
         role: document.getElementById("role").value,
+        status: "SAVED",
         jobUrl: window.jobData?.url,
         platform: "LinkedIn",
         notes: document.getElementById("notes").value,

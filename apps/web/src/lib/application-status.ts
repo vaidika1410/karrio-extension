@@ -1,4 +1,5 @@
 export const APPLICATION_STATUSES = [
+  "SAVED",
   "APPLIED",
   "INTERVIEW",
   "OFFER",
@@ -9,6 +10,7 @@ export type ApplicationStatus =
   (typeof APPLICATION_STATUSES)[number];
 
 export const STATUS_LABELS: Record<string, string> = {
+  SAVED: "Saved",
   APPLIED: "Applied",
   INTERVIEW: "Interview",
   OFFER: "Offer",

@@ -38,7 +38,7 @@ model Application {
   company String
   role    String
 
-  status ApplicationStatus @default(APPLIED)
+  status ApplicationStatus @default(SAVED)
 
   notes String?
 

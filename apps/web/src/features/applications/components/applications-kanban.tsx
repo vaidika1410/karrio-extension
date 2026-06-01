@@ -22,6 +22,7 @@ import { KanbanColumn } from "./kanban-column";
 import { useEffect, useState } from "react";
 
 const statuses = [
+    "SAVED",
     "APPLIED",
     "INTERVIEW",
     "OFFER",
@@ -31,7 +32,7 @@ const statuses = [
 export function ApplicationsKanban() {
     const queryClient = useQueryClient();
 
-    const { data = [] } = useQuery({
+    const { data } = useQuery({
         queryKey: ["applications"],
         queryFn: getApplications,
     });
@@ -40,7 +41,7 @@ export function ApplicationsKanban() {
         useState<any[]>([]);
 
     useEffect(() => {
-        setApplications(data);
+        setApplications(data ?? []);
     }, [data]);
 
     const mutation = useMutation({
@@ -102,7 +103,7 @@ export function ApplicationsKanban() {
     function handleDragStart(
         event: DragStartEvent,
     ) {
-        const application = data.find(
+        const application = applications.find(
             (app: any) =>
                 app.id === String(event.active.id),
         );

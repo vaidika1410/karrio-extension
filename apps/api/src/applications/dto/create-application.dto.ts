@@ -1,8 +1,11 @@
 import {
+  IsEnum,
   IsOptional,
   IsString,
   IsUrl,
 } from "class-validator";
+
+import { ApplicationStatus } from "../../../generated/prisma";
 
 export class CreateApplicationDto {
   @IsString()
@@ -32,7 +35,10 @@ export class CreateApplicationDto {
   jobUrl?: string;
 
   @IsOptional()
+  @IsEnum(ApplicationStatus)
+  status?: ApplicationStatus;
+
+  @IsOptional()
   @IsString()
   description?: string;
-
 }

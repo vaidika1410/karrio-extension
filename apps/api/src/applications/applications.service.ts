@@ -16,6 +16,8 @@ export class ApplicationsService {
     userId: string,
     createApplicationDto: CreateApplicationDto,
   ) {
+    console.log('--- DEBUG CREATE APPLICATION ---');
+    console.log('Incoming DTO:', JSON.stringify(createApplicationDto));
 
     const existing =
       await this.prisma.application.findFirst({
@@ -36,13 +38,18 @@ export class ApplicationsService {
       );
     }
 
+    console.log('Status to be used:', createApplicationDto.status || "SAVED");
+
     const application =
       await this.prisma.application.create({
         data: {
           ...createApplicationDto,
+          status: createApplicationDto.status || "SAVED",
           userId,
         },
       });
+    
+    console.log('Created application in DB:', JSON.stringify(application));
 
     await this.prisma.applicationActivity.create({
       data: {

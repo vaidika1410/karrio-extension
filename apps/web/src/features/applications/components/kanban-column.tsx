@@ -16,6 +16,7 @@ interface Application {
 }
 
 const columnAccent: Record<string, string> = {
+  SAVED: "border-t-zinc-400/60",
   APPLIED: "border-t-sky-500/60",
   INTERVIEW: "border-t-amber-500/60",
   OFFER: "border-t-emerald-500/60",

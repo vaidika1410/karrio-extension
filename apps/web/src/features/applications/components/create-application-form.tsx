@@ -28,7 +28,7 @@ export function CreateApplicationForm({
   const [formData, setFormData] = useState<CreateApplicationData>({
     company: "",
     role: "",
-    status: "APPLIED",
+    status: "SAVED",
     notes: "",
   });
 
@@ -46,7 +46,7 @@ export function CreateApplicationForm({
       setFormData({
         company: "",
         role: "",
-        status: "APPLIED",
+        status: "SAVED",
         notes: "",
       });
 

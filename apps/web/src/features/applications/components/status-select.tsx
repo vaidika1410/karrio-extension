@@ -60,7 +60,7 @@ export function StatusSelect({
 
   return (
     <Select
-      defaultValue={value}
+      value={value}
       onValueChange={(value) =>
         mutation.mutate(value)
       }

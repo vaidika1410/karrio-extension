@@ -3,6 +3,8 @@ import { STATUS_LABELS } from "@/lib/application-status";
 import { cn } from "@/lib/utils";
 
 const statusStyles: Record<string, string> = {
+  SAVED:
+    "border-zinc-500/20 bg-zinc-500/10 text-zinc-700 dark:text-zinc-300",
   APPLIED:
     "border-sky-500/25 bg-sky-500/10 text-sky-700 dark:text-sky-300",
   INTERVIEW:

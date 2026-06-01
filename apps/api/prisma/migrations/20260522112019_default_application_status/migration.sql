@@ -14,7 +14,7 @@ ALTER TABLE "Application" DROP COLUMN "appliedDate",
 DROP COLUMN "location",
 DROP COLUMN "salary",
 ADD COLUMN     "description" TEXT,
-ALTER COLUMN "status" SET DEFAULT 'APPLIED';
+ALTER COLUMN "status" SET DEFAULT 'SAVED';
 
 -- AddForeignKey
 ALTER TABLE "Application" ADD CONSTRAINT "Application_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
